@@ -3,7 +3,7 @@ package lommie.thebindingcontracts.recipes;
 import lommie.thebindingcontracts.TheBindingContracts;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
+import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -16,7 +16,7 @@ public class ModRecipeSerializers {
 
     public static RecipeSerializer<ContractRecipe> CONTRACT = register(
             "contract",
-            new SpecialCraftingRecipe.SpecialRecipeSerializer<>(ContractRecipe::new)
+            new ShapedRecipe.Serializer()
     );
 
     public static void register(){}
