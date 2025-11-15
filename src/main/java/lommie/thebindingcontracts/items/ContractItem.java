@@ -1,13 +1,17 @@
 package lommie.thebindingcontracts.items;
 
+import net.minecraft.component.type.TooltipDisplayComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class ContractItem extends Item {
     public ContractItem(Settings settings) {
@@ -41,5 +45,18 @@ public class ContractItem extends Item {
     @Override
     public void onCraftByPlayer(ItemStack stack, PlayerEntity player) {
         stack.set(ModItemComponents.CONTRACT_SIGNATURE,player.getUuid());
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
+        UUID playerSignature = stack.get(ModItemComponents.CONTRACT_SIGNATURE);
+        if (playerSignature != null) {
+            textConsumer.accept(Text.literal("First signature: "+playerSignature));
+        }
+        UUID otherPlayerSignature = stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE);
+        if (otherPlayerSignature != null) {
+            textConsumer.accept(Text.literal("Second signature: "+otherPlayerSignature));
+        }
     }
 }
