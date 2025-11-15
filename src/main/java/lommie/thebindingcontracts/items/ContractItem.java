@@ -41,6 +41,7 @@ public class ContractItem extends Item {
 
             if (canAddOtherPlayerToContract(stack,user.getUuid())) {
                 addOtherPlayerToContract(stack,user.getUuid());
+                user.getStackInHand(Hand.OFF_HAND).decrement(1);
                 return ActionResult.SUCCESS;
             }
         }
@@ -94,9 +95,21 @@ public class ContractItem extends Item {
         }
     }
 
-    public boolean isValidContract(ItemStack stack){
+    public static boolean isValidContract(ItemStack stack){
         if (stack.get(ModItemComponents.CONTRACT_SIGNATURE) == null) return false;
         if (stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE) == null) return false;
         return stack.get(ModItemComponents.CONTRACT_SIGNATURE) != stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE);
+    }
+
+
+    public static UUID getOtherPlayer(ItemStack stack, UUID player) {
+        UUID id_one = stack.get(ModItemComponents.CONTRACT_SIGNATURE);
+        UUID id_two = stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE);
+
+        if (id_one == player){
+            return id_two;
+        } else {
+            return id_one;
+        }
     }
 }
