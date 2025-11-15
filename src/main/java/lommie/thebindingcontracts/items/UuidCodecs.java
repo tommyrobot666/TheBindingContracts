@@ -10,9 +10,8 @@ import java.util.UUID;
 public class UuidCodecs {
     public static final Codec<UUID> CODEC =
             RecordCodecBuilder.create((instance -> instance.group(
-                    Codec.LONG.fieldOf("id_msb").forGetter((uuid) -> uuid.getMostSignificantBits()),
-                    Codec.LONG.fieldOf("id_lsb").forGetter((uuid) -> uuid.getLeastSignificantBits())
-            ).apply(instance, (lsb,msb) -> new UUID(msb,lsb))));
+                    Codec.STRING.fieldOf("id").forGetter(UUID::toString)
+            ).apply(instance, UUID::fromString)));
     public static final PacketCodec<? super PacketByteBuf, UUID> PACKET_CODEC =
             PacketCodec.of((uuid,buf) -> buf.writeUuid(uuid), (buf) -> buf.readUuid());
 }

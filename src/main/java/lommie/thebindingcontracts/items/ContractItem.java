@@ -21,20 +21,21 @@ public class ContractItem extends Item {
             ItemStack stack = user.getStackInHand(Hand.MAIN_HAND);
             assert stack.isOf(ModItems.CONTRACT); // just in case my code is bad
 
-            if (canAddOtherPlayerToContract(user.getUuid())) {
-                addOtherPlayerToContract(user.getUuid());
+            if (canAddOtherPlayerToContract(stack,user.getUuid())) {
+                addOtherPlayerToContract(stack,user.getUuid());
                 return ActionResult.SUCCESS;
             }
         }
         return ActionResult.PASS;
     }
 
-    private void addOtherPlayerToContract(UUID uuid) {
+    private void addOtherPlayerToContract(ItemStack stack, UUID otherId) {
+        stack.set(ModItemComponents.OTHER_CONTRACT_SIGNATURE,otherId);
     }
 
-    private boolean canAddOtherPlayerToContract(UUID uuid) {
-
-        return true;
+    private boolean canAddOtherPlayerToContract(ItemStack stack, UUID otherId) {
+        if (stack.get(ModItemComponents.CONTRACT_SIGNATURE) == null) return false;
+        return stack.get(ModItemComponents.CONTRACT_SIGNATURE) != otherId;
     }
 
     @Override
