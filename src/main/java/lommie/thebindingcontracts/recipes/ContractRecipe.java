@@ -1,18 +1,19 @@
 package lommie.thebindingcontracts.recipes;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.recipe.CraftingRecipe;
-import net.minecraft.recipe.IngredientPlacement;
 import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 
-public class ContractRecipe implements CraftingRecipe {
+public class ContractRecipe extends SpecialCraftingRecipe {
+
+    public ContractRecipe(CraftingRecipeCategory category) {
+        super(category);
+    }
+
     @Override
     public boolean matches(CraftingRecipeInput input, World world) {
         return false;
@@ -24,31 +25,7 @@ public class ContractRecipe implements CraftingRecipe {
     }
 
     @Override
-    public RecipeSerializer<? extends CraftingRecipe> getSerializer() {
+    public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
         return null;
-    }
-
-    @Override
-    public IngredientPlacement getIngredientPlacement() {
-        return null;
-    }
-
-    @Override
-    public CraftingRecipeCategory getCategory() {
-        return null;
-    }
-
-    public static class Serializer implements RecipeSerializer<ContractRecipe>{
-        public Serializer(){}
-
-        @Override
-        public MapCodec<ContractRecipe> codec() {
-            return null;
-        }
-
-        @Override
-        public PacketCodec<RegistryByteBuf, ContractRecipe> packetCodec() {
-            return null;
-        }
     }
 }

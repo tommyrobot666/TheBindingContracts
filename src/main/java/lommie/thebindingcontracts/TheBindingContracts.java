@@ -1,5 +1,8 @@
 package lommie.thebindingcontracts;
 
+import lommie.thebindingcontracts.items.ModItemComponents;
+import lommie.thebindingcontracts.items.ModItems;
+import lommie.thebindingcontracts.recipes.ModRecipeSerializers;
 import net.fabricmc.api.ModInitializer;
 
 public class TheBindingContracts implements ModInitializer {
@@ -7,5 +10,8 @@ public class TheBindingContracts implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        ModItemComponents.register();
+        ModItems.register();
+        ModRecipeSerializers.register();
     }
 }
