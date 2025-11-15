@@ -12,10 +12,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,7 +43,7 @@ public class ContractItem extends Item {
             assert stack.isOf(ModItems.CONTRACT); // just in case my code is bad
 
             if (canAddOtherPlayerToContract(stack,user.getUuid())) {
-                addOtherPlayerToContract(stack,user.getUuid());
+                addOtherPlayerToContract(stack,user.getUuid(),world,user.getBlockPos());
                 user.getStackInHand(Hand.OFF_HAND).decrement(1);
                 return ActionResult.SUCCESS;
             }
@@ -48,12 +51,14 @@ public class ContractItem extends Item {
         return ActionResult.PASS;
     }
 
-    private void addOtherPlayerToContract(ItemStack stack, UUID otherId) {
+    private void addOtherPlayerToContract(ItemStack stack, UUID otherId, World world, BlockPos pos) {
         stack.set(ModItemComponents.OTHER_CONTRACT_SIGNATURE,otherId);
+        world.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.PLAYERS);
     }
 
     private boolean canAddOtherPlayerToContract(ItemStack stack, UUID otherId) {
         if (stack.get(ModItemComponents.CONTRACT_SIGNATURE) == null) return false;
+        if (isValidContract(stack)) return false;
         return stack.get(ModItemComponents.CONTRACT_SIGNATURE) != otherId;
     }
 
