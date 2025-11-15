@@ -86,10 +86,11 @@ public class ContractItem extends Item {
     }
 
     public void addAttributeModifier(PlayerEntity player){
+        if (player == null) return;
         EntityAttributeInstance maxHealthAttributes = Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.MAX_HEALTH));
 
         if (!maxHealthAttributes.hasModifier(MAX_HEALTH_MODIFIER)) {
-            maxHealthAttributes.addPersistentModifier(new EntityAttributeModifier(MAX_HEALTH_MODIFIER, 2d, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+            maxHealthAttributes.addPersistentModifier(new EntityAttributeModifier(MAX_HEALTH_MODIFIER, 1d, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }
     }
 
