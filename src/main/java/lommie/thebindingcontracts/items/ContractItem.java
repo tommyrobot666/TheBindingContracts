@@ -2,6 +2,7 @@ package lommie.thebindingcontracts.items;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
@@ -17,6 +18,9 @@ public class ContractItem extends Item {
     public ActionResult use(World world, PlayerEntity user, Hand hand) {
         if (world.isClient() || hand == Hand.OFF_HAND) return ActionResult.PASS;
         if (user.getStackInHand(Hand.OFF_HAND).isOf(ModItems.WAX_SEAL)) {
+            ItemStack stack = user.getStackInHand(Hand.MAIN_HAND);
+            assert stack.isOf(ModItems.CONTRACT); // just in case my code is bad
+
             if (canAddOtherPlayerToContract(user.getUuid())) {
                 addOtherPlayerToContract(user.getUuid());
                 return ActionResult.SUCCESS;
@@ -29,6 +33,12 @@ public class ContractItem extends Item {
     }
 
     private boolean canAddOtherPlayerToContract(UUID uuid) {
+
         return true;
+    }
+
+    @Override
+    public void onCraftByPlayer(ItemStack stack, PlayerEntity player) {
+        stack.set(ModItemComponents.CONTRACT_SIGNATURE,player.getUuid());
     }
 }

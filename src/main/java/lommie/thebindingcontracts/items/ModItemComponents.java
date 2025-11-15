@@ -1,6 +1,7 @@
 package lommie.thebindingcontracts.items;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lommie.thebindingcontracts.TheBindingContracts;
 import net.minecraft.component.ComponentType;
 import net.minecraft.network.RegistryByteBuf;
@@ -9,6 +10,8 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
 
 public class ModItemComponents {
     public static <T> ComponentType<T> register(String id, Codec<T> codec, PacketCodec<? super RegistryByteBuf, T> byteCodec){
@@ -25,6 +28,14 @@ public class ModItemComponents {
                      }
                  });
     }
+
+    public static ComponentType<UUID> CONTRACT_SIGNATURE = register("first_signature",
+            UuidCodecs.CODEC,
+            UuidCodecs.PACKET_CODEC);
+
+    public static ComponentType<UUID> OTHER_CONTRACT_SIGNATURE = register("other_signature",
+            UuidCodecs.CODEC,
+            UuidCodecs.PACKET_CODEC);
 
     public static void register(){}
 }
