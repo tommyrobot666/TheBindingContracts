@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "thebindingcontracts",
+  "version": "${version}",
+  "name": "TheBindingContracts",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/thebindingcontracts/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "lommie.thebindingcontracts.client.ThebindingcontractsDataGenerator"
+    ],
+    "client": [
+      "lommie.thebindingcontracts.client.TheBindingContractsClient"
+    ],
+    "main": [
+      "lommie.thebindingcontracts.TheBindingContracts"
+    ]
+  },
+  "mixins": [
+    "thebindingcontracts.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
