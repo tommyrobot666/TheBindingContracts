@@ -37,5 +37,9 @@ public class ModItemComponents {
             UuidCodecs.CODEC,
             UuidCodecs.PACKET_CODEC);
 
+    public static ComponentType<Boolean> BROKEN = register("broken",
+            Codec.BOOL,
+            PacketCodec.of((b, buf) -> buf.writeBoolean(b),RegistryByteBuf::readBoolean));
+
     public static void register(){}
 }

@@ -96,6 +96,7 @@ public class ContractItem extends Item {
     }
 
     public static boolean isValidContract(ItemStack stack){
+        if (stack.getOrDefault(ModItemComponents.BROKEN, false)) return false;
         if (stack.get(ModItemComponents.CONTRACT_SIGNATURE) == null) return false;
         if (stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE) == null) return false;
         return stack.get(ModItemComponents.CONTRACT_SIGNATURE) != stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE);
