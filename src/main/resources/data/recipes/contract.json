@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "*#*",
+    "#%#",
+    "*#*"
+  ],
+  "key": {
+    "*": "minecraft:diamond",
+    "#": "minecraft:paper",
+    "%": "minecraft:nether_star"
+  },
+  "result": {
+    "id": "thebindingcontracts:contract"
+  }
+}
