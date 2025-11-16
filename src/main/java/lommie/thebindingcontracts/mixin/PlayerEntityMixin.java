@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,15 +25,24 @@ public class PlayerEntityMixin {
 
     @Inject(method = "onDeath", at = @At("HEAD"))
     void onDeath(DamageSource damageSource, CallbackInfo ci){
-        final UUID finalUuid = ((Entity) (Object) this).getUuid();
-        this.inventory.forEach(stack -> {
+        final UUID thisUuid = ((Entity) (Object) this).getUuid();
+        for (ItemStack stack : this.inventory) {
             if (stack.isOf(ModItems.CONTRACT)){
                 if (ContractItem.isValidContract(stack)) {
-                    UUID otherPlayer = ContractItem.getOtherPlayer(stack,finalUuid);
+                    UUID otherPlayer = ContractItem.getOtherPlayer(stack,thisUuid);
                     TheBindingContracts.playersToKill.add(otherPlayer);
                     stack.set(ModItemComponents.BROKEN, true);
                 }
             }
-        });
+        }
+//        this.inventory.forEach(stack -> {
+//            if (stack.isOf(ModItems.CONTRACT)){
+//                if (ContractItem.isValidContract(stack)) {
+//                    UUID otherPlayer = ContractItem.getOtherPlayer(stack,thisUuid);
+//                    TheBindingContracts.playersToKill.add(otherPlayer);
+//                    stack.set(ModItemComponents.BROKEN, true);
+//                }
+//            }
+//        });
     }
 }

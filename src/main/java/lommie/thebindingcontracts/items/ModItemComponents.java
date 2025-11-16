@@ -1,7 +1,6 @@
 package lommie.thebindingcontracts.items;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lommie.thebindingcontracts.TheBindingContracts;
 import net.minecraft.component.ComponentType;
 import net.minecraft.network.RegistryByteBuf;
