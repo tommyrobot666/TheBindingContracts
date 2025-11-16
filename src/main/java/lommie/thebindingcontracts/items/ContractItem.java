@@ -15,6 +15,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -47,7 +48,7 @@ public abstract class ContractItem extends Item {
     private boolean canAddOtherPlayerToContract(ItemStack stack, UUID otherId) {
         if (stack.get(ModItemComponents.CONTRACT_SIGNATURE) == null) return false;
         if (isValidContract(stack)) return false;
-        return stack.get(ModItemComponents.CONTRACT_SIGNATURE) != otherId;
+        return !Objects.equals(stack.get(ModItemComponents.CONTRACT_SIGNATURE), otherId);
     }
 
     @Override
@@ -77,7 +78,7 @@ public abstract class ContractItem extends Item {
         if (stack.getOrDefault(ModItemComponents.BROKEN, false)) return false;
         if (stack.get(ModItemComponents.CONTRACT_SIGNATURE) == null) return false;
         if (stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE) == null) return false;
-        return stack.get(ModItemComponents.CONTRACT_SIGNATURE) != stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE);
+        return Objects.equals(stack.get(ModItemComponents.CONTRACT_SIGNATURE), stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE));
     }
 
 
@@ -85,7 +86,8 @@ public abstract class ContractItem extends Item {
         UUID id_one = stack.get(ModItemComponents.CONTRACT_SIGNATURE);
         UUID id_two = stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE);
 
-        if (id_one == player){
+        assert id_one != null;
+        if (id_one.equals(player)){
             return id_two;
         } else {
             return id_one;

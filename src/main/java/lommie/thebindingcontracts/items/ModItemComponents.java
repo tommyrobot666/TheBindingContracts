@@ -8,6 +8,7 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Uuids;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -29,12 +30,12 @@ public class ModItemComponents {
     }
 
     public static final ComponentType<UUID> CONTRACT_SIGNATURE = register("first_signature",
-            UuidCodecs.CODEC,
-            UuidCodecs.PACKET_CODEC);
+            Uuids.CODEC,
+            Uuids.PACKET_CODEC);
 
     public static final ComponentType<UUID> OTHER_CONTRACT_SIGNATURE = register("other_signature",
-            UuidCodecs.CODEC,
-            UuidCodecs.PACKET_CODEC);
+            Uuids.CODEC,
+            Uuids.PACKET_CODEC);
 
     public static final ComponentType<Boolean> BROKEN = register("broken",
             Codec.BOOL,

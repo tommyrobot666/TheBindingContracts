@@ -27,6 +27,8 @@ public class PlayerEntityMixin {
         final UUID thisUuid = ((Entity) (Object) this).getUuid();
         for (ItemStack stack : this.inventory) {
             if (stack.getItem().getClass().getSuperclass().equals(ContractItem.class)){
+                TheBindingContracts.LOGGER.error(stack.toString());
+                TheBindingContracts.LOGGER.error("{}", ContractItem.isValidContract(stack));
                 if (ContractItem.isValidContract(stack)) {
                     UUID otherPlayer = ContractItem.getOtherPlayer(stack,thisUuid);
                     TheBindingContracts.playersToKill.add(otherPlayer);
