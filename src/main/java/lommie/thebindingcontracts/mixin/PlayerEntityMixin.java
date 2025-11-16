@@ -3,7 +3,6 @@ package lommie.thebindingcontracts.mixin;
 import lommie.thebindingcontracts.TheBindingContracts;
 import lommie.thebindingcontracts.items.ContractItem;
 import lommie.thebindingcontracts.items.ModItemComponents;
-import lommie.thebindingcontracts.items.ModItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;

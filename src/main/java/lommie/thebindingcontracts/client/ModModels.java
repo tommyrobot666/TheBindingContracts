@@ -1,4 +1,4 @@
-package lommie.thebindingcontracts.client.models;
+package lommie.thebindingcontracts.client;
 
 import lommie.thebindingcontracts.TheBindingContracts;
 import net.minecraft.client.data.Model;

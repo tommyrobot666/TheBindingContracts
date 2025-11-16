@@ -17,10 +17,10 @@ public class ModItems {
         return Registry.register(Registries.ITEM, itemKey, item);
     }
 
-    public static Item WAX_SEAL = register("wax_seal",
+    public static final Item WAX_SEAL = register("wax_seal",
             Item::new, new Item.Settings());
 
-    public static Item LIFE_LINK_CONTRACT = register("life_link_contract",
+    public static final Item LIFE_LINK_CONTRACT = register("life_link_contract",
             LifeLinkContract::new, new Item.Settings());
 
     public static void register(){}

@@ -28,15 +28,15 @@ public class ModItemComponents {
                  });
     }
 
-    public static ComponentType<UUID> CONTRACT_SIGNATURE = register("first_signature",
+    public static final ComponentType<UUID> CONTRACT_SIGNATURE = register("first_signature",
             UuidCodecs.CODEC,
             UuidCodecs.PACKET_CODEC);
 
-    public static ComponentType<UUID> OTHER_CONTRACT_SIGNATURE = register("other_signature",
+    public static final ComponentType<UUID> OTHER_CONTRACT_SIGNATURE = register("other_signature",
             UuidCodecs.CODEC,
             UuidCodecs.PACKET_CODEC);
 
-    public static ComponentType<Boolean> BROKEN = register("broken",
+    public static final ComponentType<Boolean> BROKEN = register("broken",
             Codec.BOOL,
             PacketCodec.of((b, buf) -> buf.writeBoolean(b),RegistryByteBuf::readBoolean));
 

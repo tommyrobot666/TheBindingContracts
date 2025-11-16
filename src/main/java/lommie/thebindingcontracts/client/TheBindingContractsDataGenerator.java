@@ -1,6 +1,5 @@
 package lommie.thebindingcontracts.client;
 
-import lommie.thebindingcontracts.client.models.ModModels;
 import lommie.thebindingcontracts.items.ModItemComponents;
 import lommie.thebindingcontracts.items.ModItems;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
