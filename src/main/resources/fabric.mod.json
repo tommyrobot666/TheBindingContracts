@@ -11,7 +11,7 @@
   "environment": "*",
   "entrypoints": {
     "fabric-datagen": [
-      "lommie.thebindingcontracts.client.ThebindingcontractsDataGenerator"
+      "lommie.thebindingcontracts.client.TheBindingContractsDataGenerator"
     ],
     "client": [
       "lommie.thebindingcontracts.client.TheBindingContractsClient"

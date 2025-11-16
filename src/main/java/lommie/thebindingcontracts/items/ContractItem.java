@@ -28,7 +28,7 @@ public abstract class ContractItem extends Item {
         if (world.isClient() || hand == Hand.OFF_HAND) return ActionResult.PASS;
         if (user.getStackInHand(Hand.OFF_HAND).isOf(ModItems.WAX_SEAL)) {
             ItemStack stack = user.getStackInHand(Hand.MAIN_HAND);
-            assert stack.isOf(ModItems.CONTRACT); // just in case my code is bad
+            assert stack.getItem().getClass().getSuperclass().equals(ContractItem.class); // just in case my code is bad
 
             if (canAddOtherPlayerToContract(stack,user.getUuid())) {
                 addOtherPlayerToContract(stack,user.getUuid(),world,user.getBlockPos());

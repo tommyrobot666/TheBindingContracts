@@ -27,7 +27,7 @@ public class PlayerEntityMixin {
     void onDeath(DamageSource damageSource, CallbackInfo ci){
         final UUID thisUuid = ((Entity) (Object) this).getUuid();
         for (ItemStack stack : this.inventory) {
-            if (stack.isOf(ModItems.CONTRACT)){
+            if (stack.getItem().getClass().getSuperclass().equals(ContractItem.class)){
                 if (ContractItem.isValidContract(stack)) {
                     UUID otherPlayer = ContractItem.getOtherPlayer(stack,thisUuid);
                     TheBindingContracts.playersToKill.add(otherPlayer);
@@ -36,7 +36,7 @@ public class PlayerEntityMixin {
             }
         }
 //        this.inventory.forEach(stack -> {
-//            if (stack.isOf(ModItems.CONTRACT)){
+//            if (stack.isOf(ModItems.LIFE_LINK_CONTRACT)){
 //                if (ContractItem.isValidContract(stack)) {
 //                    UUID otherPlayer = ContractItem.getOtherPlayer(stack,thisUuid);
 //                    TheBindingContracts.playersToKill.add(otherPlayer);
