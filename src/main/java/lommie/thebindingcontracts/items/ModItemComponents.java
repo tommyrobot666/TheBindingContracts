@@ -9,37 +9,22 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Uuids;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 public class ModItemComponents {
-    public static <T> ComponentType<T> register(String id, Codec<T> codec, PacketCodec<? super RegistryByteBuf, T> byteCodec){
-         return Registry.register(Registries.DATA_COMPONENT_TYPE, Identifier.of(TheBindingContracts.MOD_ID, id),
-                 new ComponentType<T>() {
-                     @Override
-                     public @Nullable Codec<T> getCodec() {
-                         return codec;
-                     }
-
-                     @Override
-                     public PacketCodec<? super RegistryByteBuf, T> getPacketCodec() {
-                         return byteCodec;
-                     }
-                 });
+    public static <T> ComponentType<T> register(String id, ComponentType<T> type){
+         return Registry.register(Registries.DATA_COMPONENT_TYPE, Identifier.of(TheBindingContracts.MOD_ID, id), type);
     }
 
     public static final ComponentType<UUID> CONTRACT_SIGNATURE = register("first_signature",
-            Uuids.CODEC,
-            Uuids.PACKET_CODEC);
+            new ComponentType.Builder<UUID>().codec(Uuids.CODEC).packetCodec(Uuids.PACKET_CODEC).build());
 
     public static final ComponentType<UUID> OTHER_CONTRACT_SIGNATURE = register("other_signature",
-            Uuids.CODEC,
-            Uuids.PACKET_CODEC);
+            new ComponentType.Builder<UUID>().codec(Uuids.CODEC).packetCodec(Uuids.PACKET_CODEC).build());
 
     public static final ComponentType<Boolean> BROKEN = register("broken",
-            Codec.BOOL,
-            PacketCodec.of((b, buf) -> buf.writeBoolean(b),RegistryByteBuf::readBoolean));
+            new ComponentType.Builder<Boolean>().codec(Codec.BOOL).packetCodec(PacketCodec.of((b, buf) -> buf.writeBoolean(b),RegistryByteBuf::readBoolean)).build());
 
     public static void register(){}
 }

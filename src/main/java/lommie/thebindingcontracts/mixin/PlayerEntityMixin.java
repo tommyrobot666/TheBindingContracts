@@ -6,11 +6,8 @@ import lommie.thebindingcontracts.items.ModItemComponents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -19,13 +16,11 @@ import java.util.UUID;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin {
-    @Shadow @Final
-    PlayerInventory inventory;
-
     @Inject(method = "onDeath", at = @At("HEAD"))
     void onDeath(DamageSource damageSource, CallbackInfo ci){
+        TheBindingContracts.LOGGER.error("Mixin stuff");
         final UUID thisUuid = ((Entity) (Object) this).getUuid();
-        for (ItemStack stack : this.inventory) {
+        for (ItemStack stack : ((PlayerEntity) (Object) this).getInventory()) {
             if (stack.getItem().getClass().getSuperclass().equals(ContractItem.class)){
                 TheBindingContracts.LOGGER.error(stack.toString());
                 TheBindingContracts.LOGGER.error("{}", ContractItem.isValidContract(stack));
@@ -36,14 +31,5 @@ public class PlayerEntityMixin {
                 }
             }
         }
-//        this.inventory.forEach(stack -> {
-//            if (stack.isOf(ModItems.LIFE_LINK_CONTRACT)){
-//                if (ContractItem.isValidContract(stack)) {
-//                    UUID otherPlayer = ContractItem.getOtherPlayer(stack,thisUuid);
-//                    TheBindingContracts.playersToKill.add(otherPlayer);
-//                    stack.set(ModItemComponents.BROKEN, true);
-//                }
-//            }
-//        });
     }
 }

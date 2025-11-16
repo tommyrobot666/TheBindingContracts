@@ -78,7 +78,7 @@ public abstract class ContractItem extends Item {
         if (stack.getOrDefault(ModItemComponents.BROKEN, false)) return false;
         if (stack.get(ModItemComponents.CONTRACT_SIGNATURE) == null) return false;
         if (stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE) == null) return false;
-        return Objects.equals(stack.get(ModItemComponents.CONTRACT_SIGNATURE), stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE));
+        return !Objects.equals(stack.get(ModItemComponents.CONTRACT_SIGNATURE), stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE));
     }
 
 
