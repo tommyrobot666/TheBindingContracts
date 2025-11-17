@@ -24,7 +24,7 @@ public class ModItems {
             LifeLinkContract::new, new Item.Settings());
 
     public static final Item TELEPORT_CONTRACT = register("teleport_contract",
-            TeleportContract::new, new Item.Settings());
+            TeleportContract::new, new Item.Settings().maxDamage(2));
 
     public static final Item TRADE_CONTRACT = register("trade_contract",
             TradeContract::new, new Item.Settings());
