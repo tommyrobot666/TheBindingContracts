@@ -20,6 +20,7 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
         pack.addProvider(ModelGenerator::new);
+        pack.addProvider(EnUsLanguageGenerator::new);
     }
 
     private static class ModelGenerator extends FabricModelProvider{
