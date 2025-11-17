@@ -23,5 +23,14 @@ public class ModItems {
     public static final Item LIFE_LINK_CONTRACT = register("life_link_contract",
             LifeLinkContract::new, new Item.Settings());
 
+    public static final Item TELEPORT_CONTRACT = register("teleport_contract",
+            TeleportContract::new, new Item.Settings());
+
+    public static final Item TRADE_CONTRACT = register("trade_contract",
+            TradeContract::new, new Item.Settings());
+
+    public static final Item LAND_CONTRACT = register("land_contract",
+            LandContract::new, new Item.Settings());
+
     public static void register(){}
 }
