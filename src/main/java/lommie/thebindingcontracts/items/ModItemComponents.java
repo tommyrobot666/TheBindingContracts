@@ -23,5 +23,11 @@ public class ModItemComponents {
     public static final ComponentType<Boolean> BROKEN = register("broken",
             new ComponentType.Builder<Boolean>().codec(Codec.BOOL).packetCodec(PacketCodec.of((b, buf) -> buf.writeBoolean(b),RegistryByteBuf::readBoolean)).build());
 
+    public static final ComponentType<Boolean> HAS_SIGNATURES = register("has_signatures",
+            new ComponentType.Builder<Boolean>().codec(Codec.BOOL).packetCodec(PacketCodec.of((b, buf) -> buf.writeBoolean(b),RegistryByteBuf::readBoolean)).build());
+
+    public static final ComponentType<Boolean> SIGNED = register("signed",
+            new ComponentType.Builder<Boolean>().codec(Codec.BOOL).packetCodec(PacketCodec.of((b, buf) -> buf.writeBoolean(b),RegistryByteBuf::readBoolean)).build());
+
     public static void register(){}
 }

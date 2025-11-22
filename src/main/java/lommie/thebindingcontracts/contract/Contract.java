@@ -3,30 +3,34 @@ package lommie.thebindingcontracts.contract;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lommie.thebindingcontracts.items.ContractItem;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Uuids;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Contract {
     public static final Codec<Contract> CODEC = RecordCodecBuilder.create((instance) ->
-        instance.group(Codec)
+        instance.group(TermsAndConditions.CODEC.listOf().fieldOf("terms")
+                .forGetter((c) -> c.terms),
+                Uuids.CODEC.listOf().fieldOf("signers").forGetter((c) -> c.signers),
+                Codec.BOOL.fieldOf("signed").forGetter((c) -> c.signed))
+                .apply(instance, Contract::new)
     );
 
     private final ArrayList<TermsAndConditions> terms = new ArrayList<>();
-    private final ArrayList<NbtComponent> termsSavedData = new ArrayList<>();
     private final ArrayList<UUID> signers = new ArrayList<>();
     public boolean signed = false;
 
     public Contract(){}
 
-    private Contract(ArrayList<TermsAndConditions> terms, ArrayList<UUID> signers, boolean signed ){
+    private Contract(List<TermsAndConditions> terms, List<UUID> signers, boolean signed ){
         this.terms.addAll(terms);
         this.signers.addAll(signers);
         this.signed = signed;

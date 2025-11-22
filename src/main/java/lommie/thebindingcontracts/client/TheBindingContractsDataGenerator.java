@@ -50,8 +50,8 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
             ItemModel.Unbaked broken = ItemModels.basic(m.registerSubModel(item,"_broken",ModModels.CONTRACT));
             m.output.accept(item, ItemModels.condition(ItemModels.hasComponentProperty(ModItemComponents.BROKEN),
                     broken,
-                    ItemModels.condition(ItemModels.hasComponentProperty(ModItemComponents.CONTRACT_SIGNATURE),
-                            ItemModels.condition(ItemModels.hasComponentProperty(ModItemComponents.OTHER_CONTRACT_SIGNATURE),
+                    ItemModels.condition(ItemModels.hasComponentProperty(ModItemComponents.HAS_SIGNATURES),
+                            ItemModels.condition(ItemModels.hasComponentProperty(ModItemComponents.SIGNED),
                                     complete,
                                     one_signature),
                             unsigned)));
