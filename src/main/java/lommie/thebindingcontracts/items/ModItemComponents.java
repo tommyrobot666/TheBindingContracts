@@ -17,10 +17,7 @@ public class ModItemComponents {
          return Registry.register(Registries.DATA_COMPONENT_TYPE, Identifier.of(TheBindingContracts.MOD_ID, id), type);
     }
 
-    public static final ComponentType<UUID> CONTRACT_SIGNATURE = register("first_signature",
-            new ComponentType.Builder<UUID>().codec(Uuids.CODEC).packetCodec(Uuids.PACKET_CODEC).build());
-
-    public static final ComponentType<UUID> OTHER_CONTRACT_SIGNATURE = register("other_signature",
+    public static final ComponentType<UUID> CONTRACT_ID = register("contract_id",
             new ComponentType.Builder<UUID>().codec(Uuids.CODEC).packetCodec(Uuids.PACKET_CODEC).build());
 
     public static final ComponentType<Boolean> BROKEN = register("broken",

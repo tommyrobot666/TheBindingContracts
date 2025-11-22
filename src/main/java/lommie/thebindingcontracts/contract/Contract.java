@@ -1,6 +1,9 @@
 package lommie.thebindingcontracts.contract;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lommie.thebindingcontracts.items.ContractItem;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -12,11 +15,22 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class Contract {
+    public static final Codec<Contract> CODEC = RecordCodecBuilder.create((instance) ->
+        instance.group(Codec)
+    );
+
     private final ArrayList<TermsAndConditions> terms = new ArrayList<>();
+    private final ArrayList<NbtComponent> termsSavedData = new ArrayList<>();
     private final ArrayList<UUID> signers = new ArrayList<>();
     public boolean signed = false;
 
     public Contract(){}
+
+    private Contract(ArrayList<TermsAndConditions> terms, ArrayList<UUID> signers, boolean signed ){
+        this.terms.addAll(terms);
+        this.signers.addAll(signers);
+        this.signed = signed;
+    }
 
     public void onUseItem(int selectedTerm, World world, PlayerEntity user, Hand hand) {
         if(!signers.contains(user.getUuid())) return;
