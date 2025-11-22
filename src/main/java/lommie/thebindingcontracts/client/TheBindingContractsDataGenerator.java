@@ -36,10 +36,7 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
 
         @Override
         public void generateItemModels(ItemModelGenerator m) {
-            registerContractModel(ModItems.LIFE_LINK_CONTRACT,m);
-            registerContractModel(ModItems.TELEPORT_CONTRACT,m);
-            registerContractModel(ModItems.TRADE_CONTRACT,m);
-            registerContractModel(ModItems.LAND_CONTRACT,m);
+            registerContractModel(ModItems.CONTRACT,m);
             m.register(ModItems.WAX_SEAL);
         }
 
@@ -66,10 +63,11 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
 
         @Override
         public void generateTranslations(RegistryWrapper.WrapperLookup registryAccess, TranslationBuilder b) {
-            b.add(ModItems.LIFE_LINK_CONTRACT, "Life Link Contract");
+            /*b.add(ModItems.LIFE_LINK_CONTRACT, "Life Link Contract");
             b.add(ModItems.TELEPORT_CONTRACT, "Teleport Contract");
             b.add(ModItems.TRADE_CONTRACT, "Trade Contract");
-            b.add(ModItems.LAND_CONTRACT, "Land Contract");
+            b.add(ModItems.LAND_CONTRACT, "Land Contract");*/
+            b.add(ModItems.CONTRACT, "Contract");
             b.add(ModItems.WAX_SEAL, "Wax seal");
         }
     }

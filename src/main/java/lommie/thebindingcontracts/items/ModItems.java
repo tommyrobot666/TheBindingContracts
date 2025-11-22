@@ -1,6 +1,9 @@
 package lommie.thebindingcontracts.items;
 
 import lommie.thebindingcontracts.TheBindingContracts;
+import lommie.thebindingcontracts.contract.terms.LifeLinkTerm;
+import lommie.thebindingcontracts.contract.terms.TeleportTerm;
+import lommie.thebindingcontracts.contract.terms.TradeTerm;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -20,17 +23,9 @@ public class ModItems {
     public static final Item WAX_SEAL = register("wax_seal",
             Item::new, new Item.Settings());
 
-    public static final Item LIFE_LINK_CONTRACT = register("life_link_contract",
-            LifeLinkContract::new, new Item.Settings());
+    public static final Item CONTRACT = register("contract",
+            ContractItem::new, new Item.Settings());
 
-    public static final Item TELEPORT_CONTRACT = register("teleport_contract",
-            TeleportContract::new, new Item.Settings().maxDamage(2));
-
-    public static final Item TRADE_CONTRACT = register("trade_contract",
-            TradeContract::new, new Item.Settings());
-
-    public static final Item LAND_CONTRACT = register("land_contract",
-            LandContract::new, new Item.Settings());
 
     public static void register(){}
 }

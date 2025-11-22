@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public abstract class ContractItem extends Item {
+public class ContractItem extends Item {
     public ContractItem(Settings settings) {
         super(settings);
     }
@@ -36,11 +36,11 @@ public abstract class ContractItem extends Item {
 
         if (hand == Hand.OFF_HAND) return ActionResult.PASS;
         ItemStack stackInOtherHand = user.getStackInHand(Hand.OFF_HAND);
-        if (contract.isUnfinished()){
+        if (canAddPlayerToContract(contract,user.getUuid())){
             addPlayerToContract(contract,user.getUuid(),world,user.getBlockPos());
             return ActionResult.SUCCESS;
         }
-        if (stackInOtherHand.isOf(ModItems.WAX_SEAL) && contract.isValidButUnsigned()){
+        if (stackInOtherHand.isOf(ModItems.WAX_SEAL) && contract.isValid()){
             stackInOtherHand.decrement(1);
             contract.sign();
             return ActionResult.SUCCESS;
@@ -48,9 +48,13 @@ public abstract class ContractItem extends Item {
         return ActionResult.PASS;
     }
 
-    private void addPlayerToContract(Contract contract, UUID otherId, World world, BlockPos pos) {
-        contract.addSigner(otherId);
+    private void addPlayerToContract(Contract contract, UUID player, World world, BlockPos pos) {
+        contract.addSigner(player);
         world.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.PLAYERS);
+    }
+
+    private boolean canAddPlayerToContract(Contract contract, UUID player){
+        return !contract.getSigners().contains(player)&&contract.isUnfinished();
     }
 
     @Override

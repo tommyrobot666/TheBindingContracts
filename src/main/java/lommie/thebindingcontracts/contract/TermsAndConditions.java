@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
-public class TermsAndConditions {
+public abstract class TermsAndConditions {
     public static final Codec<TermsAndConditions> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(Identifier.CODEC.fieldOf("id")
                                     .forGetter((t) -> t.key),

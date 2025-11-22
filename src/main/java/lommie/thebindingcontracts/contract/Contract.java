@@ -104,11 +104,11 @@ public class Contract {
         return broken;
     }
 
-    public boolean isValid(){
-        return signers.size()>1&&signed&&!broken&&!terms.isEmpty();
+    public boolean isValidAndSigned(){
+        return isValid()&&signed;
     }
 
-    public boolean isValidButUnsigned(){
+    public boolean isValid(){
         return signers.size()>1&&!broken&&!terms.isEmpty();
     }
 
