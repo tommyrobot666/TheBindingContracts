@@ -49,6 +49,12 @@ public class ContractsPersistentState extends PersistentState {
         return getContractsInWorld(world).get(id);
     }
 
+    public static Contract getAContractInWorldAndDirty(ServerWorld world, UUID uuid) {
+        ContractsPersistentState state = getPersistentStateInWorld(world);
+        state.markDirty();
+        return state.getAContract(uuid);
+    }
+
     public Contract getAContract(UUID id){
         return contracts.get(id);
     }

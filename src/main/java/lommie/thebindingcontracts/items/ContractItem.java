@@ -1,10 +1,13 @@
 package lommie.thebindingcontracts.items;
 
+import lommie.thebindingcontracts.contract.Contract;
+import lommie.thebindingcontracts.data.ContractsPersistentState;
 import net.minecraft.component.type.TooltipDisplayComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
@@ -26,34 +29,34 @@ public abstract class ContractItem extends Item {
 
     @Override
     public ActionResult use(World world, PlayerEntity user, Hand hand) {
-        if (world.isClient() || hand == Hand.OFF_HAND) return ActionResult.PASS;
-        if (user.getStackInHand(Hand.OFF_HAND).isOf(ModItems.WAX_SEAL)) {
-            ItemStack stack = user.getStackInHand(Hand.MAIN_HAND);
-            assert stack.getItem().getClass().getSuperclass().equals(ContractItem.class); // just in case my code is bad
+        if (world.isClient()) return ActionResult.PASS;
+        ItemStack stack = user.getStackInHand(hand);
+        Contract contract = getContract(stack, (ServerWorld) world);
+        contract.onUseItem(0,world,user,hand);
 
-            if (canAddOtherPlayerToContract(stack,user.getUuid())) {
-                addOtherPlayerToContract(stack,user.getUuid(),world,user.getBlockPos());
-                user.getStackInHand(Hand.OFF_HAND).decrement(1);
-                return ActionResult.SUCCESS;
-            }
+        if (hand == Hand.OFF_HAND) return ActionResult.PASS;
+        ItemStack stackInOtherHand = user.getStackInHand(Hand.OFF_HAND);
+        if (contract.isUnfinished()){
+            addPlayerToContract(contract,user.getUuid(),world,user.getBlockPos());
+            return ActionResult.SUCCESS;
+        }
+        if (stackInOtherHand.isOf(ModItems.WAX_SEAL) && contract.isValidButUnsigned()){
+            stackInOtherHand.decrement(1);
+            contract.sign();
+            return ActionResult.SUCCESS;
         }
         return ActionResult.PASS;
     }
 
-    private void addOtherPlayerToContract(ItemStack stack, UUID otherId, World world, BlockPos pos) {
-        stack.set(ModItemComponents.OTHER_CONTRACT_SIGNATURE,otherId);
+    private void addPlayerToContract(Contract contract, UUID otherId, World world, BlockPos pos) {
+        contract.addSigner(otherId);
         world.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.PLAYERS);
-    }
-
-    private boolean canAddOtherPlayerToContract(ItemStack stack, UUID otherId) {
-        if (stack.get(ModItemComponents.CONTRACT_SIGNATURE) == null) return false;
-        if (isValidContract(stack)) return false;
-        return !Objects.equals(stack.get(ModItemComponents.CONTRACT_SIGNATURE), otherId);
     }
 
     @Override
     public void onCraftByPlayer(ItemStack stack, PlayerEntity player) {
-        stack.set(ModItemComponents.CONTRACT_SIGNATURE,player.getUuid());
+        if (player.getEntityWorld().isClient()) return;
+        Contract contract = getContract(stack, (ServerWorld) player.getEntityWorld());
     }
 
     @SuppressWarnings("deprecation")
@@ -64,33 +67,35 @@ public abstract class ContractItem extends Item {
             return;
         }
 
-        UUID playerSignature = stack.get(ModItemComponents.CONTRACT_SIGNATURE);
+        //TODO: send usernames to client
+        UUID playerSignature = null;//stack.get(ModItemComponents.CONTRACT_SIGNATURE);
         if (playerSignature != null) {
             textConsumer.accept(Text.literal("First signature: "+playerSignature));
         }
-        UUID otherPlayerSignature = stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE);
+        UUID otherPlayerSignature = null;//stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE);
         if (otherPlayerSignature != null) {
             textConsumer.accept(Text.literal("Second signature: "+otherPlayerSignature));
         }
     }
 
-    public static boolean isValidContract(ItemStack stack){
-        if (stack.getOrDefault(ModItemComponents.BROKEN, false)) return false;
-        if (stack.get(ModItemComponents.CONTRACT_SIGNATURE) == null) return false;
-        if (stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE) == null) return false;
-        return !Objects.equals(stack.get(ModItemComponents.CONTRACT_SIGNATURE), stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE));
-    }
+    public static UUID getOtherPlayer(Contract contract, UUID player) {
+        UUID id_one = Objects.requireNonNull(contract.getSigners().getFirst());
+        UUID id_two = Objects.requireNonNull(contract.getSigners().getLast());
 
-
-    public static UUID getOtherPlayer(ItemStack stack, UUID player) {
-        UUID id_one = stack.get(ModItemComponents.CONTRACT_SIGNATURE);
-        UUID id_two = stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE);
-
-        assert id_one != null;
         if (id_one.equals(player)){
             return id_two;
         } else {
             return id_one;
         }
+    }
+
+    public static Contract getContract(ItemStack stack, ServerWorld world){
+        return ContractsPersistentState.getAContractInWorldAndDirty(world,
+                Objects.requireNonNull(stack.get(ModItemComponents.CONTRACT_ID)));
+    }
+
+    public static Contract getContractNoDirty(ItemStack stack, ServerWorld world){
+        return ContractsPersistentState.getAContractInWorld(world,
+                Objects.requireNonNull(stack.get(ModItemComponents.CONTRACT_ID)));
     }
 }

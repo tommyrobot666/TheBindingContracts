@@ -26,7 +26,8 @@ public class Contract {
 
     private final ArrayList<TermsAndConditions> terms = new ArrayList<>();
     private final ArrayList<UUID> signers = new ArrayList<>();
-    public boolean signed = false;
+    private boolean signed = false;
+    private boolean broken = false;
 
     public Contract(){}
 
@@ -41,7 +42,7 @@ public class Contract {
         if(world.isClient()) return;
         ItemStack stack = user.getStackInHand(hand);
         ItemStack stackInOtherHand = inOtherHand(user, hand);
-        UUID otherId = ContractItem.getOtherPlayer(stack, user.getUuid());
+        UUID otherId = ContractItem.getOtherPlayer(this, user.getUuid());
         PlayerEntity other = world.getPlayerAnyDimension(otherId);
 
 
@@ -89,5 +90,33 @@ public class Contract {
 
     public void sign(){
         signed = true;
+    }
+
+    public boolean isSigned(){
+        return signed;
+    }
+
+    public void break2(){
+        broken = true;
+    }
+
+    public boolean isBroken(){
+        return broken;
+    }
+
+    public boolean isValid(){
+        return signers.size()>1&&signed&&!broken&&!terms.isEmpty();
+    }
+
+    public boolean isValidButUnsigned(){
+        return signers.size()>1&&!broken&&!terms.isEmpty();
+    }
+
+    public boolean isUnfinished(){
+        return !signed&&!broken;
+    }
+
+    public List<UUID> getSigners(){
+        return signers;
     }
 }
