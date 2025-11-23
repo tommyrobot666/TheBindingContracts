@@ -78,7 +78,10 @@ public class Contract {
 
     public void onTermsJustBroken(){}
 
-    public void onTermsBroken(){}
+    /// @return is onBroken done?
+    public boolean onTermsBrokenTick(){
+        return true;
+    }
 
     public void addTerm(TermsAndConditions term){
         terms.add(term);

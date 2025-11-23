@@ -3,6 +3,8 @@ package lommie.thebindingcontracts.items;
 import lommie.thebindingcontracts.contract.Contract;
 import lommie.thebindingcontracts.data.ContractsPersistentState;
 import net.minecraft.component.type.TooltipDisplayComponent;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,10 +19,9 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class ContractItem extends Item {
@@ -31,16 +32,19 @@ public class ContractItem extends Item {
     @Override
     public ActionResult use(World world, PlayerEntity user, Hand hand) {
         if (world.isClient()) return ActionResult.PASS;
+        // call contract functions
         ItemStack stack = user.getStackInHand(hand);
         Contract contract = getContract(stack, (ServerWorld) world);
         contract.onUseItem(0,world,user,hand);
 
+        // add self to contract when used
         if (hand == Hand.OFF_HAND) return ActionResult.PASS;
         ItemStack stackInOtherHand = user.getStackInHand(Hand.OFF_HAND);
         if (canAddPlayerToContract(contract,user.getUuid())){
-            addPlayerToContract(contract,user.getUuid(),world,user.getBlockPos());
+            addPlayerToContract(stack,contract,user.getUuid(),world,user.getBlockPos());
             return ActionResult.SUCCESS;
         }
+        // seal contract
         if (stackInOtherHand.isOf(ModItems.WAX_SEAL) && contract.isValid()){
             stackInOtherHand.decrement(1);
             contract.sign();
@@ -49,8 +53,11 @@ public class ContractItem extends Item {
         return ActionResult.PASS;
     }
 
-    private void addPlayerToContract(Contract contract, UUID player, World world, BlockPos pos) {
+    private void addPlayerToContract(ItemStack stack, Contract contract, UUID player, World world, BlockPos pos) {
         contract.addSigner(player);
+        List<String> signatures = stack.getOrDefault(ModItemComponents.SIGNATURES,new ArrayList<>());
+        signatures.add(Objects.requireNonNull(world.getPlayerAnyDimension(player)).getStringifiedName());
+        stack.set(ModItemComponents.SIGNATURES,signatures);
         world.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.PLAYERS);
     }
 
@@ -72,14 +79,18 @@ public class ContractItem extends Item {
             return;
         }
 
-        //TODO: send usernames to client
-        UUID playerSignature = null;//stack.get(ModItemComponents.CONTRACT_SIGNATURE);
-        if (playerSignature != null) {
-            textConsumer.accept(Text.literal("First signature: "+playerSignature));
-        }
-        UUID otherPlayerSignature = null;//stack.get(ModItemComponents.OTHER_CONTRACT_SIGNATURE);
-        if (otherPlayerSignature != null) {
-            textConsumer.accept(Text.literal("Second signature: "+otherPlayerSignature));
+        List<String> signatures = stack.getOrDefault(ModItemComponents.SIGNATURES,List.of());
+        if (signatures.isEmpty()) {
+            textConsumer.accept(Text.literal("No signatures"));
+        } else {
+            textConsumer.accept(Text.literal("Signed by:"));
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String name : signatures) {
+                stringBuilder.append(name);
+                stringBuilder.append(", ");
+            }
+            stringBuilder.delete(stringBuilder.length()-1,stringBuilder.length());
+            textConsumer.accept(Text.literal(stringBuilder.toString()));
         }
     }
 
@@ -113,6 +124,20 @@ public class ContractItem extends Item {
             contracts.put(newContractId, new Contract());
             stack.set(ModItemComponents.CONTRACT_ID, newContractId);
             return newContractId;
+        }
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
+        // check contract state
+        Contract contract = getContractNoDirty(stack, world);
+
+        if (contract.isBroken() && !stack.hasChangedComponent(ModItemComponents.BROKEN)){
+            stack.set(ModItemComponents.BROKEN,true);
+        }
+
+        if (contract.isValidAndSigned() && !stack.hasChangedComponent(ModItemComponents.SIGNED)){
+            stack.set(ModItemComponents.SIGNED,true);
         }
     }
 }

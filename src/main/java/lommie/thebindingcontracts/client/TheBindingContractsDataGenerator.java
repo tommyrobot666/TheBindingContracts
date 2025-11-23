@@ -47,7 +47,7 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
             ItemModel.Unbaked broken = ItemModels.basic(m.registerSubModel(item,"_broken",ModModels.CONTRACT));
             m.output.accept(item, ItemModels.condition(ItemModels.hasComponentProperty(ModItemComponents.BROKEN),
                     broken,
-                    ItemModels.condition(ItemModels.hasComponentProperty(ModItemComponents.HAS_SIGNATURES),
+                    ItemModels.condition(ItemModels.hasComponentProperty(ModItemComponents.SIGNATURES),
                             ItemModels.condition(ItemModels.hasComponentProperty(ModItemComponents.SIGNED),
                                     complete,
                                     one_signature),
@@ -63,10 +63,6 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
 
         @Override
         public void generateTranslations(RegistryWrapper.WrapperLookup registryAccess, TranslationBuilder b) {
-            /*b.add(ModItems.LIFE_LINK_CONTRACT, "Life Link Contract");
-            b.add(ModItems.TELEPORT_CONTRACT, "Teleport Contract");
-            b.add(ModItems.TRADE_CONTRACT, "Trade Contract");
-            b.add(ModItems.LAND_CONTRACT, "Land Contract");*/
             b.add(ModItems.CONTRACT, "Contract");
             b.add(ModItems.WAX_SEAL, "Wax seal");
         }
