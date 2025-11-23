@@ -19,7 +19,6 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -36,7 +35,9 @@ public class ContractItem extends Item {
         // call contract functions
         ItemStack stack = user.getStackInHand(hand);
         Contract contract = getContract(stack, (ServerWorld) world);
-        contract.onUseItem(0,world,user,hand);
+        if (contract.isValidAndSigned()) {
+            contract.onUseItem(0, world, user, hand);
+        }
 
         // add self to contract when used
         if (hand == Hand.OFF_HAND) return ActionResult.PASS;
