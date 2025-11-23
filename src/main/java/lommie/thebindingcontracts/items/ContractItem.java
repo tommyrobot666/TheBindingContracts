@@ -18,6 +18,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -95,11 +96,23 @@ public class ContractItem extends Item {
 
     public static Contract getContract(ItemStack stack, ServerWorld world){
         return ContractsPersistentState.getAContractInWorldAndDirty(world,
-                Objects.requireNonNull(stack.get(ModItemComponents.CONTRACT_ID)));
+                getContractIdOrCreate(stack, world));
     }
 
     public static Contract getContractNoDirty(ItemStack stack, ServerWorld world){
         return ContractsPersistentState.getAContractInWorld(world,
-                Objects.requireNonNull(stack.get(ModItemComponents.CONTRACT_ID)));
+                getContractIdOrCreate(stack, world));
+    }
+
+    public static UUID getContractIdOrCreate(ItemStack stack, ServerWorld world){
+        if (stack.hasChangedComponent(ModItemComponents.CONTRACT_ID)) {
+            return Objects.requireNonNull(stack.get(ModItemComponents.CONTRACT_ID));
+        } else {
+            HashMap<UUID,Contract> contracts = ContractsPersistentState.getContractsInWorld(world);
+            UUID newContractId = UUID.randomUUID();
+            contracts.put(newContractId, new Contract());
+            stack.set(ModItemComponents.CONTRACT_ID, newContractId);
+            return newContractId;
+        }
     }
 }
