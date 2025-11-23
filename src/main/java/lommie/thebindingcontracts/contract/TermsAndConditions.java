@@ -43,7 +43,7 @@ public abstract class TermsAndConditions {
         this.savedData = savedData;
     }
 
-    public void onUseWhenOtherIsOnline(ServerWorld world, ServerPlayerEntity user, ServerPlayerEntity other, Hand hand, ItemStack stack, ItemStack stackInOtherHand, Contract contract) {
+    public void onUse(ServerWorld world, ServerPlayerEntity user, Hand hand, ItemStack stack, ItemStack stackInOtherHand, Contract contract) {
 
     }
 

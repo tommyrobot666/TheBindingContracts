@@ -10,6 +10,7 @@ import net.minecraft.world.PersistentStateType;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 public class ContractsPersistentState extends PersistentState {
@@ -46,7 +47,7 @@ public class ContractsPersistentState extends PersistentState {
     }
 
     public static Contract getAContractInWorld(ServerWorld world, UUID id){
-        return getContractsInWorld(world).get(id);
+        return getPersistentStateInWorld(world).getAContract(id);
     }
 
     public static Contract getAContractInWorldAndDirty(ServerWorld world, UUID uuid) {
@@ -56,7 +57,7 @@ public class ContractsPersistentState extends PersistentState {
     }
 
     public Contract getAContract(UUID id){
-        return contracts.get(id);
+        return contracts.getOrDefault(id, new Contract());
     }
 
     private Map<UUID, Contract> getContracts() {

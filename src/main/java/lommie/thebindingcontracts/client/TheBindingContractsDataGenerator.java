@@ -37,6 +37,7 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
         @Override
         public void generateItemModels(ItemModelGenerator m) {
             registerContractModel(ModItems.CONTRACT,m);
+            registerContractModel(ModItems.TWO_PLAYER_CONTRACT,m);
             m.register(ModItems.WAX_SEAL);
         }
 
@@ -64,6 +65,7 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
         @Override
         public void generateTranslations(RegistryWrapper.WrapperLookup registryAccess, TranslationBuilder b) {
             b.add(ModItems.CONTRACT, "Contract");
+            b.add(ModItems.TWO_PLAYER_CONTRACT, "Contract (between only 2 players)");
             b.add(ModItems.WAX_SEAL, "Wax seal");
         }
     }

@@ -2,14 +2,14 @@ package lommie.thebindingcontracts.contract.terms;
 
 import lommie.thebindingcontracts.contract.Contract;
 import lommie.thebindingcontracts.contract.ModTerms;
-import lommie.thebindingcontracts.contract.TermsAndConditions;
+import lommie.thebindingcontracts.contract.TwoPlayerTermsAndConditions;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 
-public class TradeTerm extends TermsAndConditions {
+public class TradeTerm extends TwoPlayerTermsAndConditions {
     public TradeTerm() {
         super(ModTerms.TRADE);
     }

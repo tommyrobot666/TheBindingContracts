@@ -19,6 +19,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -41,7 +42,7 @@ public class ContractItem extends Item {
         if (hand == Hand.OFF_HAND) return ActionResult.PASS;
         ItemStack stackInOtherHand = user.getStackInHand(Hand.OFF_HAND);
         if (canAddPlayerToContract(contract,user.getUuid())){
-            addPlayerToContract(stack,contract,user.getUuid(),world,user.getBlockPos());
+            addPlayerToContract(stack,contract,user,world,user.getBlockPos());
             return ActionResult.SUCCESS;
         }
         // seal contract
@@ -53,10 +54,10 @@ public class ContractItem extends Item {
         return ActionResult.PASS;
     }
 
-    private void addPlayerToContract(ItemStack stack, Contract contract, UUID player, World world, BlockPos pos) {
-        contract.addSigner(player);
+    protected void addPlayerToContract(ItemStack stack, Contract contract, PlayerEntity player, World world, BlockPos pos) {
+        contract.addSigner(player.getUuid());
         List<String> signatures = stack.getOrDefault(ModItemComponents.SIGNATURES,new ArrayList<>());
-        signatures.add(Objects.requireNonNull(world.getPlayerAnyDimension(player)).getStringifiedName());
+        signatures.add(player.getStringifiedName());
         stack.set(ModItemComponents.SIGNATURES,signatures);
         world.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.PLAYERS);
     }
@@ -65,17 +66,14 @@ public class ContractItem extends Item {
         return !contract.getSigners().contains(player)&&contract.isUnfinished();
     }
 
-    @Override
-    public void onCraftByPlayer(ItemStack stack, PlayerEntity player) {
-        if (player.getEntityWorld().isClient()) return;
-        Contract contract = getContract(stack, (ServerWorld) player.getEntityWorld());
-    }
-
     @SuppressWarnings("deprecation")
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
         if (stack.getOrDefault(ModItemComponents.BROKEN, false)) {
             textConsumer.accept(Text.literal("BROKEN").setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
+            if (type.isAdvanced()){
+                textConsumer.accept(Text.literal("Contract Id: "+stack.getOrDefault(ModItemComponents.CONTRACT_ID,UUID.randomUUID())).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+            }
             return;
         }
 
@@ -92,27 +90,20 @@ public class ContractItem extends Item {
             stringBuilder.delete(stringBuilder.length()-1,stringBuilder.length());
             textConsumer.accept(Text.literal(stringBuilder.toString()));
         }
-    }
 
-    public static UUID getOtherPlayer(Contract contract, UUID player) {
-        UUID id_one = Objects.requireNonNull(contract.getSigners().getFirst());
-        UUID id_two = Objects.requireNonNull(contract.getSigners().getLast());
-
-        if (id_one.equals(player)){
-            return id_two;
-        } else {
-            return id_one;
+        if (type.isAdvanced()){
+            textConsumer.accept(Text.literal("Contract Id: "+stack.getOrDefault(ModItemComponents.CONTRACT_ID,UUID.randomUUID())).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
         }
     }
 
     public static Contract getContract(ItemStack stack, ServerWorld world){
-        return ContractsPersistentState.getAContractInWorldAndDirty(world,
-                getContractIdOrCreate(stack, world));
+        return Objects.requireNonNull(ContractsPersistentState.getAContractInWorldAndDirty(world,
+                getContractIdOrCreate(stack, world)));
     }
 
     public static Contract getContractNoDirty(ItemStack stack, ServerWorld world){
-        return ContractsPersistentState.getAContractInWorld(world,
-                getContractIdOrCreate(stack, world));
+        return Objects.requireNonNull(ContractsPersistentState.getAContractInWorld(world,
+                getContractIdOrCreate(stack, world)));
     }
 
     public static UUID getContractIdOrCreate(ItemStack stack, ServerWorld world){
@@ -129,6 +120,7 @@ public class ContractItem extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
+        if (!stack.hasChangedComponent(ModItemComponents.CONTRACT_ID)) return;
         // check contract state
         Contract contract = getContractNoDirty(stack, world);
 

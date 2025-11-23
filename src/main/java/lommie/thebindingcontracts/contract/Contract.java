@@ -2,7 +2,7 @@ package lommie.thebindingcontracts.contract;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import lommie.thebindingcontracts.items.ContractItem;
+import lommie.thebindingcontracts.items.TwoPlayerContractItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -42,17 +42,16 @@ public class Contract {
         if(world.isClient()) return;
         ItemStack stack = user.getStackInHand(hand);
         ItemStack stackInOtherHand = inOtherHand(user, hand);
-        UUID otherId = ContractItem.getOtherPlayer(this, user.getUuid());
-        PlayerEntity other = world.getPlayerAnyDimension(otherId);
+        ServerPlayerEntity other = TwoPlayerContractItem.getOtherPlayer(this, (ServerWorld) world,user.getUuid());
 
 
         TermsAndConditions term = terms.get(selectedTerm);
-
-        // bunch of other onUse stuff
-
-        if (other == null) return;
-        
-        term.onUseWhenOtherIsOnline((ServerWorld) world, (ServerPlayerEntity) user, (ServerPlayerEntity) other,hand,stack,stackInOtherHand,this);
+        if (term.getClass().getSuperclass().equals(TwoPlayerTermsAndConditions.class) && other != null) {
+            TwoPlayerTermsAndConditions twoPlayerTerm = ((TwoPlayerTermsAndConditions) term);
+            twoPlayerTerm.onUseWhenOtherIsOnline((ServerWorld) world, (ServerPlayerEntity) user, other, hand, stack, stackInOtherHand, this);
+        } else {
+            term.onUse((ServerWorld) world, (ServerPlayerEntity) user, hand, stack, stackInOtherHand, this);
+        }
     }
 
     private static ItemStack inOtherHand(PlayerEntity player, Hand hand){

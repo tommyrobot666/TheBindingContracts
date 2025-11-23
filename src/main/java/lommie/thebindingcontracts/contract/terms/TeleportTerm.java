@@ -2,7 +2,7 @@ package lommie.thebindingcontracts.contract.terms;
 
 import lommie.thebindingcontracts.contract.Contract;
 import lommie.thebindingcontracts.contract.ModTerms;
-import lommie.thebindingcontracts.contract.TermsAndConditions;
+import lommie.thebindingcontracts.contract.TwoPlayerTermsAndConditions;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -11,7 +11,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 
-public class TeleportTerm extends TermsAndConditions {
+public class TeleportTerm extends TwoPlayerTermsAndConditions {
     public TeleportTerm() {
         super(ModTerms.TELEPORT);
         savedData.putInt("uses_left",10);

@@ -26,6 +26,8 @@ public class ModItems {
     public static final Item CONTRACT = register("contract",
             ContractItem::new, new Item.Settings());
 
+    public static final Item TWO_PLAYER_CONTRACT = register("two_player_contract",
+            TwoPlayerContractItem::new, new Item.Settings());
 
     public static void register(){}
 }
