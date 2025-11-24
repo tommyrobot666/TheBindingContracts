@@ -40,41 +40,32 @@ public class RegisteredTermArgumentType implements ArgumentType<Identifier>, Sug
         return suggestionsBuilder.buildFuture();
     }
 
-    public static class Serializer implements ArgumentSerializer<RegisteredTermArgumentType, SerializerProperties> {
-
+    public static class Serializer implements ArgumentSerializer<RegisteredTermArgumentType, Serializer.Properties> {
+        @Override
+        public void writePacket(Properties properties, PacketByteBuf buf) {}
 
         @Override
-        public void writePacket(SerializerProperties serializerProperties, PacketByteBuf buf) {
+        public Properties fromPacket(PacketByteBuf buf) {return new Properties();}
 
+        @Override
+        public Properties getArgumentTypeProperties(RegisteredTermArgumentType argumentType) {
+            return new Properties();
         }
 
         @Override
-        public SerializerProperties fromPacket(PacketByteBuf buf) {
-            return null;
-        }
+        public void writeJson(Properties properties, JsonObject json) {}
 
-        @Override
-        public void writeJson(SerializerProperties serializerProperties, JsonObject json) {
+        public final class Properties implements ArgumentSerializer.ArgumentTypeProperties<RegisteredTermArgumentType>{
 
-        }
+            @Override
+            public RegisteredTermArgumentType createType(CommandRegistryAccess commandRegistryAccess) {
+                return new RegisteredTermArgumentType();
+            }
 
-        @Override
-        public SerializerProperties getArgumentTypeProperties(RegisteredTermArgumentType argumentType) {
-            return null;
-        }
-
-    }
-
-    public static class SerializerProperties implements ArgumentSerializer.ArgumentTypeProperties<RegisteredTermArgumentType>{
-
-        @Override
-        public RegisteredTermArgumentType createType(CommandRegistryAccess commandRegistryAccess) {
-            return new RegisteredTermArgumentType();
-        }
-
-        @Override
-        public ArgumentSerializer<RegisteredTermArgumentType, ?> getSerializer() {
-            return this;
+            @Override
+            public ArgumentSerializer<RegisteredTermArgumentType, ?> getSerializer() {
+                return Serializer.this;
+            }
         }
     }
 }
