@@ -31,6 +31,14 @@ public abstract class TermsAndConditions {
         }
     }
 
+    public static TermsAndConditions createNew(Identifier id) throws Exception{
+        return TheBindingContracts.TERM_TYPE_REGISTRY.get(id).newWith();
+    }
+
+    private TermsAndConditions newWith() {
+        return newWithData(this.savedData.copy());
+    }
+
     public final NbtCompound savedData;
     public final Identifier key;
 

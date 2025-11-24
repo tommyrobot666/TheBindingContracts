@@ -20,7 +20,7 @@ import net.minecraft.command.argument.serialize.ArgumentSerializer;
 import java.util.concurrent.CompletableFuture;
 
 public class RegisteredTermArgumentType implements ArgumentType<Identifier>, SuggestionProvider<ServerCommandSource> {
-    static SimpleCommandExceptionType ERROR = new SimpleCommandExceptionType(Text.literal("Id not found it Term Type Registry."));
+    static SimpleCommandExceptionType ERROR = new SimpleCommandExceptionType(Text.literal("Id not found in Term Type Registry."));
 
     @Override
     public Identifier parse(StringReader stringReader) throws CommandSyntaxException {
