@@ -22,9 +22,14 @@ public class ContractCommandActionArgumentType implements ArgumentType<ContractC
 
     @Override
     public ContractCommandAction parse(StringReader stringReader) throws CommandSyntaxException {
-        String value = stringReader.readString();
+        String value = stringReader.readString().strip().toLowerCase();
+        try {
+            ContractCommandAction a = ContractCommandAction.valueOf(stringReader.readString());
+        } catch (IllegalArgumentException | CommandSyntaxException ignored) {
+
+        }
         for (ContractCommandAction action : ContractCommandAction.values()){
-            if (value.strip().toLowerCase().contains(action.name())){
+            if (value.contains(action.getName())){
                 return action;
             }
         }
