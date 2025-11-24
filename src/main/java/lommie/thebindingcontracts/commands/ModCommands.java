@@ -1,12 +1,10 @@
 package lommie.thebindingcontracts.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.BoolArgumentType;
 import lommie.thebindingcontracts.TheBindingContracts;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.UuidArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -34,6 +32,7 @@ public class ModCommands {
     private static void commandRegisterEvent(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(CommandManager.literal("contracts")
                 .then(CommandManager.argument("id", new UuidArgumentType())
+                                .suggests(new ContractIdSuggestions())
                 //TODO: allow only valid contract id. suggest one in hand, then others in inventory
                     .then(CommandManager.argument("action", new ContractCommandActionArgumentType())
                             .suggests(new ContractCommandActionArgumentType())
