@@ -34,10 +34,15 @@ public class RegisteredTermArgumentType implements ArgumentType<Identifier>, Sug
 
     @Override
     public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> commandContext, SuggestionsBuilder suggestionsBuilder) throws CommandSyntaxException {
+        return listSuggestions(commandContext,suggestionsBuilder);
+    }
+
+    @Override
+    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         for (Identifier id : TheBindingContracts.TERM_TYPE_REGISTRY.getIds()) {
-            suggestionsBuilder.suggest(id.toString());
+            builder.suggest(id.toString());
         }
-        return suggestionsBuilder.buildFuture();
+        return builder.buildFuture();
     }
 
     public static class Serializer implements ArgumentSerializer<RegisteredTermArgumentType, Serializer.Properties> {

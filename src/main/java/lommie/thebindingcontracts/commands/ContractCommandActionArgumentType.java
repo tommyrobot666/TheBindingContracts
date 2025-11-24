@@ -5,6 +5,7 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
@@ -12,18 +13,32 @@ import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.serialize.ArgumentSerializer;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.Text;
 
 import java.util.concurrent.CompletableFuture;
 
 public class ContractCommandActionArgumentType implements ArgumentType<ContractCommandAction>, SuggestionProvider<ServerCommandSource> {
+    static SimpleCommandExceptionType ERROR = new SimpleCommandExceptionType(Text.literal("Action not found"));
+
     @Override
     public ContractCommandAction parse(StringReader stringReader) throws CommandSyntaxException {
-        return ContractCommandAction.valueOf(stringReader.readString());
+        String value = stringReader.readString();
+        for (ContractCommandAction action : ContractCommandAction.values()){
+            if (value.strip().toLowerCase().contains(action.name())){
+                return action;
+            }
+        }
+        throw ERROR.createWithContext(stringReader);
     }
 
     @Override
     public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> commandContext, SuggestionsBuilder suggestionsBuilder) throws CommandSyntaxException {
-        return CompletableFuture.completedFuture(suggestionsBuilder
+        return listSuggestions(commandContext,suggestionsBuilder);
+    }
+
+    @Override
+    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+        return CompletableFuture.completedFuture(builder
                 .suggest("add_term")
                 .suggest("remove_term")
                 .suggest("add_signer")

@@ -39,13 +39,13 @@ public class ModCommands {
                             .suggests(new ContractCommandActionArgumentType())
                             .then(CommandManager.argument("term", new RegisteredTermArgumentType())
                                     .suggests(new RegisteredTermArgumentType())
-                                    .executes(commandContext -> 1))) //TODO: add ContractCommand::TermModification
+                                    .executes(commandContext -> 1)) //TODO: add ContractCommand::TermModification
                             .then(CommandManager.argument("player", EntityArgumentType.player())
                                     //TODO: suggest ids and player names that have signed the contract
                                     .suggests((commandContext, suggestionsBuilder) -> suggestionsBuilder.buildFuture())
                                     .executes(commandContext -> 1)) //TODO: add ContractCommand::SignersModification
                             .then(CommandManager.argument("bool", BoolArgumentType.bool())
-                                    .executes(commandContext -> 1)) //TODO: add ContractCommand::StateModification
+                                    .executes(commandContext -> 1))) //TODO: add ContractCommand::StateModification
                 ));
     }
 
