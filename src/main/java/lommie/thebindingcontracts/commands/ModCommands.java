@@ -2,14 +2,26 @@ package lommie.thebindingcontracts.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import lommie.thebindingcontracts.TheBindingContracts;
+import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.UuidArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.util.Identifier;
 
 public class ModCommands {
+    public static void register(){
+        ArgumentTypeRegistry.registerArgumentType(
+                Identifier.of(TheBindingContracts.MOD_ID,"registered_term"),
+                RegisteredTermArgumentType.class,
+                new RegisteredTermArgumentType.Serializer()
+        );
+        registerEvent();
+    }
+
     public static void registerEvent(){
         CommandRegistrationCallback.EVENT.register(ModCommands::commandRegisterEvent);
     }
@@ -31,4 +43,6 @@ public class ModCommands {
                                 .executes(commandContext -> 1)) //TODO: add ContractCommand::StateModification
                 );
     }
+
+
 }

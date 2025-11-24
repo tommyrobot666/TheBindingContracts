@@ -1,5 +1,6 @@
 package lommie.thebindingcontracts;
 
+import lommie.thebindingcontracts.commands.ModCommands;
 import lommie.thebindingcontracts.contract.ModTerms;
 import lommie.thebindingcontracts.contract.TermsAndConditions;
 import lommie.thebindingcontracts.items.ModItemComponents;
@@ -36,5 +37,6 @@ public class TheBindingContracts implements ModInitializer {
         ModItemComponents.register();
         ModItems.register();
         ModTerms.register();
+        ModCommands.register();
     }
 }
