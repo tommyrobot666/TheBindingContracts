@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
-public abstract class TermsAndConditions {
+public abstract class TermsAndConditions implements TermsAndConditionsType{
     public static final Codec<TermsAndConditions> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(Identifier.CODEC.fieldOf("id")
                                     .forGetter(TermsAndConditions::typeGetId),
@@ -47,35 +47,11 @@ public abstract class TermsAndConditions {
         return Objects.requireNonNull(TheBindingContracts.TERM_TYPE_REGISTRY.get(id)).typeCreateNew(savedData);
     }
 
-    private TermsAndConditions typeCreateNewExceptions(NbtCompound savedData) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public TermsAndConditions typeCreateNewExceptions(NbtCompound savedData) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         return this.getClass().getConstructor(NbtCompound.class).newInstance(savedData);
     }
 
-    public TermsAndConditions typeCreateNew(NbtCompound savedData) {
-        try {
-            return typeCreateNewExceptions(savedData);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private TermsAndConditions typeCreateNewExceptions() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public TermsAndConditions typeCreateNewExceptions() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         return this.getClass().getConstructor().newInstance();
-    }
-
-    public TermsAndConditions typeCreateNew() {
-        try {
-            return typeCreateNewExceptions();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Identifier typeGetId(){
-        throw new RuntimeException("Term type has no id! (check typeGetId in class)");
-    }
-
-    public int typeMaxPlayers(){
-        return -1;
     }
 }
