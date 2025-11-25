@@ -12,14 +12,21 @@ import net.minecraft.util.Identifier;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
+import java.util.Optional;
 
 public abstract class TermsAndConditions {
     public static final Codec<TermsAndConditions> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(Identifier.CODEC.fieldOf("id")
                                     .forGetter((t) -> t.key),
-                            NbtCompound.CODEC.fieldOf("savedData").forGetter((t) -> t.savedData))
-                    .apply(instance, (id,savedData) ->
-                        Objects.requireNonNull(TheBindingContracts.TERM_TYPE_REGISTRY.get(id)).newWithData(savedData)
+                            NbtCompound.CODEC.optionalFieldOf("savedData").forGetter((t) -> {
+                                        try {
+                                            t.getClass().getConstructor(Identifier.class, NbtCompound.class);
+                                            return Optional.of(t.savedData);
+                                        } catch (NoSuchMethodException e) {
+                                            return Optional.empty();
+                                        }})
+            ).apply(instance, (id,savedData) ->
+                            (savedData.isPresent() ? Objects.requireNonNull(TheBindingContracts.TERM_TYPE_REGISTRY.get(id)).newWithData(savedData.orElseThrow()) : createNewHandled(id))
                     )
     );
 
@@ -31,12 +38,24 @@ public abstract class TermsAndConditions {
         }
     }
 
-    public static TermsAndConditions createNew(Identifier id) throws Exception{
+    public static TermsAndConditions createNew(Identifier id) throws Exception {
         return TheBindingContracts.TERM_TYPE_REGISTRY.get(id).newWith();
     }
 
+    public static TermsAndConditions createNewHandled(Identifier id){
+        try {
+            return createNew(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private TermsAndConditions newWith() {
-        return newWithData(this.savedData.copy());
+        try {
+            return this.getClass().getConstructor().newInstance();
+        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public final NbtCompound savedData;

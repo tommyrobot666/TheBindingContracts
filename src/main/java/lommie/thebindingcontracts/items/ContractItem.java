@@ -57,7 +57,7 @@ public class ContractItem extends Item {
 
     protected void addPlayerToContract(ItemStack stack, Contract contract, PlayerEntity player, World world, BlockPos pos) {
         contract.addSigner(player.getUuid());
-        List<String> signatures = stack.getOrDefault(ModItemComponents.SIGNATURES,new ArrayList<>());
+        ArrayList<String> signatures = new ArrayList<>(stack.getOrDefault(ModItemComponents.SIGNATURES,List.of()));
         signatures.add(player.getStringifiedName());
         stack.set(ModItemComponents.SIGNATURES,signatures);
         world.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.PLAYERS);
