@@ -9,6 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -25,6 +26,8 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class ContractItem extends Item {
+    public static final int SIGNATURES_TOOLTIP_MAX_CHAR_PER_LINE = 150;
+
     public ContractItem(Settings settings) {
         super(settings);
     }
@@ -84,7 +87,13 @@ public class ContractItem extends Item {
         } else {
             textConsumer.accept(Text.literal("Signed by:"));
             StringBuilder stringBuilder = new StringBuilder();
+            int lineLength = 0;
             for (String name : signatures) {
+                lineLength += name.length();
+                if (lineLength > SIGNATURES_TOOLTIP_MAX_CHAR_PER_LINE){
+                    stringBuilder.append("\n");
+                    lineLength = 0;
+                }
                 stringBuilder.append(name);
                 stringBuilder.append(", ");
             }
@@ -127,10 +136,28 @@ public class ContractItem extends Item {
 
         if (contract.isBroken() && !stack.hasChangedComponent(ModItemComponents.BROKEN)){
             stack.set(ModItemComponents.BROKEN,true);
+            return;
+        }
+
+        if (contract.isValid() && !stack.hasChangedComponent(ModItemComponents.VALID)){
+            stack.set(ModItemComponents.VALID,true);
         }
 
         if (contract.isValidAndSigned() && !stack.hasChangedComponent(ModItemComponents.SIGNED)){
             stack.set(ModItemComponents.SIGNED,true);
+        }
+
+        if (contract.getSigners().size() != stack.getOrDefault(ModItemComponents.SIGNATURES,List.of()).size()){
+            ArrayList<String> signatures = new ArrayList<>();
+            for (UUID signer : contract.getSigners()) {
+                Optional<PlayerEntity> player = Optional.ofNullable(world.getPlayerAnyDimension(signer));
+                if (player.isPresent()) {
+                    signatures.add(player.orElseThrow().getStringifiedName());
+                } else {
+                    signatures.add(signer.toString());
+                }
+            }
+            stack.set(ModItemComponents.SIGNATURES,signatures);
         }
     }
 }
