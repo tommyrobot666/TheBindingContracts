@@ -41,16 +41,19 @@ public class LifeLinkTerm extends TermsAndConditions {
         }
     }
 
+    @SuppressWarnings("unused")
     @Override
     public TermsAndConditions typeCreateNew(NbtCompound savedData) {
         return new LifeLinkTerm(savedData);
     }
 
+    @SuppressWarnings("unused")
     @Override
     public TermsAndConditions typeCreateNew() {
         return new LifeLinkTerm();
     }
 
+    @SuppressWarnings("unused")
     @Override
     public Identifier typeGetId() {
         return ModTerms.LIFE_LINK;

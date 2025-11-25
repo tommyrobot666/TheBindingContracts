@@ -18,7 +18,7 @@ import net.minecraft.text.Text;
 import java.util.concurrent.CompletableFuture;
 
 public class ContractCommandActionArgumentType implements ArgumentType<ContractCommandAction>, SuggestionProvider<ServerCommandSource> {
-    static SimpleCommandExceptionType ERROR = new SimpleCommandExceptionType(Text.literal("Action not found"));
+    static final SimpleCommandExceptionType ERROR = new SimpleCommandExceptionType(Text.literal("Action not found"));
 
     @Override
     public ContractCommandAction parse(StringReader stringReader) throws CommandSyntaxException {
@@ -32,7 +32,7 @@ public class ContractCommandActionArgumentType implements ArgumentType<ContractC
     }
 
     @Override
-    public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> commandContext, SuggestionsBuilder suggestionsBuilder) throws CommandSyntaxException {
+    public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> commandContext, SuggestionsBuilder suggestionsBuilder) {
         return listSuggestions(commandContext,suggestionsBuilder);
     }
 

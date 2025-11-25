@@ -34,5 +34,6 @@ public class ModItemComponents {
     public static final ComponentType<Boolean> SIGNED = register("signed",
             new ComponentType.Builder<Boolean>().codec(Codec.BOOL).packetCodec(PacketCodec.of((b, buf) -> buf.writeBoolean(b),RegistryByteBuf::readBoolean)).build());
 
+    @SuppressWarnings("EmptyMethod")
     public static void register(){}
 }

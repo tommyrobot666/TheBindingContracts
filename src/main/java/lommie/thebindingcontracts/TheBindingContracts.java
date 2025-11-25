@@ -14,13 +14,10 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 public class TheBindingContracts implements ModInitializer {
     // https://misode.github.io/recipe/
     public static final String MOD_ID = "thebindingcontracts";
+    @SuppressWarnings("unused")
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static final RegistryKey<Registry<TermsAndConditions>> TERM_TYPE_REGISTRY_KEY = RegistryKey.ofRegistry(
@@ -29,8 +26,6 @@ public class TheBindingContracts implements ModInitializer {
     public static final SimpleRegistry<TermsAndConditions> TERM_TYPE_REGISTRY = FabricRegistryBuilder.createSimple(
             TERM_TYPE_REGISTRY_KEY
     ).buildAndRegister();
-
-    public static final List<UUID> playersToKill = new ArrayList<>();
 
     @Override
     public void onInitialize() {

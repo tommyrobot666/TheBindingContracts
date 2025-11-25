@@ -21,6 +21,7 @@ public class TradeTerm extends TwoPlayerTermsAndConditions {
         super(new NbtCompound());
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void onUseWhenOtherIsOnline(ServerWorld world, ServerPlayerEntity user, ServerPlayerEntity other, Hand hand, ItemStack stack, ItemStack stackInOtherHand, Contract contract) {
         ItemEntity itemEntity = new ItemEntity(other.getEntityWorld(),
@@ -34,16 +35,19 @@ public class TradeTerm extends TwoPlayerTermsAndConditions {
         stackInOtherHand.setCount(0);
     }
 
+    @SuppressWarnings("unused")
     @Override
     public TermsAndConditions typeCreateNew(NbtCompound savedData) {
         return new TradeTerm(savedData);
     }
 
+    @SuppressWarnings("unused")
     @Override
     public TermsAndConditions typeCreateNew() {
         return new TradeTerm();
     }
 
+    @SuppressWarnings("unused")
     @Override
     public Identifier typeGetId() {
         return ModTerms.TRADE;

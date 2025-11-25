@@ -3,6 +3,8 @@ package lommie.thebindingcontracts.contract;
 import lommie.thebindingcontracts.TheBindingContracts;
 import lommie.thebindingcontracts.contract.terms.LandTerm;
 import lommie.thebindingcontracts.contract.terms.LifeLinkTerm;
+import lommie.thebindingcontracts.contract.terms.TeleportTerm;
+import lommie.thebindingcontracts.contract.terms.TradeTerm;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
@@ -13,9 +15,10 @@ public class ModTerms {
     }
 
     public static final Identifier LIFE_LINK = register("life_link",new LifeLinkTerm());
-    public static final Identifier TELEPORT = register("teleport",new LifeLinkTerm());
-    public static final Identifier TRADE = register("trade",new LifeLinkTerm());
+    public static final Identifier TELEPORT = register("teleport",new TeleportTerm());
+    public static final Identifier TRADE = register("trade",new TradeTerm());
     public static final Identifier LAND = register("land",new LandTerm());
 
+    @SuppressWarnings("EmptyMethod")
     public static void register(){}
 }

@@ -29,6 +29,7 @@ public class ModCommands {
         CommandRegistrationCallback.EVENT.register(ModCommands::commandRegisterEvent);
     }
 
+    @SuppressWarnings("unused")
     private static void commandRegisterEvent(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(CommandManager.literal("contracts")
                 .then(CommandManager.argument("id", new UuidArgumentType())

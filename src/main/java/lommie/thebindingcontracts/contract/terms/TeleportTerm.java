@@ -24,6 +24,7 @@ public class TeleportTerm extends TwoPlayerTermsAndConditions {
         savedData.putInt("uses_left",10);
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void onUseWhenOtherIsOnline(ServerWorld world, ServerPlayerEntity user, ServerPlayerEntity other, Hand hand, ItemStack stack, ItemStack stackInOtherHand, Contract contract) {
         int usesLeft = savedData.getInt("uses_left",0);
@@ -36,16 +37,19 @@ public class TeleportTerm extends TwoPlayerTermsAndConditions {
         savedData.putInt("uses_left", usesLeft-1);
     }
 
+    @SuppressWarnings("unused")
     @Override
     public TermsAndConditions typeCreateNew(NbtCompound savedData) {
         return new TeleportTerm(savedData);
     }
 
+    @SuppressWarnings("unused")
     @Override
     public TermsAndConditions typeCreateNew() {
         return new TeleportTerm();
     }
 
+    @SuppressWarnings("unused")
     @Override
     public Identifier typeGetId() {
         return ModTerms.TELEPORT;

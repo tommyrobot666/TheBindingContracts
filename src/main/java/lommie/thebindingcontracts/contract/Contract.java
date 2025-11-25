@@ -62,6 +62,7 @@ public class Contract {
         }
     }
     
+    @SuppressWarnings("unused")
     public void onTick(World world){
         if (world.isClient()) return;
         for (UUID uuid : signers){
@@ -75,9 +76,11 @@ public class Contract {
         }
     }
 
+    @SuppressWarnings({"unused", "EmptyMethod"})
     public void onTermsJustBroken(){}
 
     /// @return is onBroken done?
+    @SuppressWarnings({"unused", "SameReturnValue"})
     public boolean onTermsBrokenTick(){
         return true;
     }
@@ -94,10 +97,12 @@ public class Contract {
         signed = true;
     }
 
+    @SuppressWarnings("unused")
     public boolean isSigned(){
         return signed;
     }
 
+    @SuppressWarnings("unused")
     public void break2(){
         broken = true;
     }

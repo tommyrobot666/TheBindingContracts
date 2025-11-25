@@ -11,6 +11,7 @@ public abstract class TwoPlayerTermsAndConditions extends TermsAndConditions{
         super(savedData);
     }
 
+    @SuppressWarnings("unused")
     public void onUseWhenOtherIsOnline(ServerWorld world, ServerPlayerEntity user, ServerPlayerEntity other, Hand hand, ItemStack stack, ItemStack stackInOtherHand, Contract contract) {
 
     }

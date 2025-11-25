@@ -14,16 +14,19 @@ public class LandTerm extends TermsAndConditions {
         super(new NbtCompound());
     }
 
+    @SuppressWarnings("unused")
     @Override
     public TermsAndConditions typeCreateNew(NbtCompound savedData) {
         return new LandTerm(savedData);
     }
 
+    @SuppressWarnings("unused")
     @Override
     public TermsAndConditions typeCreateNew() {
         return new LandTerm();
     }
 
+    @SuppressWarnings("unused")
     @Override
     public Identifier typeGetId() {
         return ModTerms.LAND;

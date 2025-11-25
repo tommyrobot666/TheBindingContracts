@@ -28,11 +28,14 @@ public class ContractsPersistentState extends PersistentState {
                     null
                     );
 
-    public final HashMap<UUID, Contract> contracts = new HashMap<>();
+    public final HashMap<UUID, Contract> contracts;
 
-    public ContractsPersistentState() {}
+    public ContractsPersistentState() {
+        this(Map.of());
+    }
 
     public ContractsPersistentState(Map<UUID, Contract> contracts) {
+        this.contracts = new HashMap<>(contracts);
     }
 
     public static ContractsPersistentState getPersistentStateInWorld(ServerWorld world){
@@ -56,7 +59,14 @@ public class ContractsPersistentState extends PersistentState {
     }
 
     public Contract getAContract(UUID id){
-        return contracts.getOrDefault(id, new Contract());
+        Contract contract = contracts.get(id);
+        if (contract == null){
+            contracts.put(id, new Contract());
+            return getAContract(id);
+        }
+        else {
+            return contract;
+        }
     }
 
     private Map<UUID, Contract> getContracts() {

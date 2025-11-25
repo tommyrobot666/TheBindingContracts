@@ -31,10 +31,12 @@ public abstract class TermsAndConditions implements TermsAndConditionsType{
         this.savedData = savedData;
     }
 
+    @SuppressWarnings({"unused", "EmptyMethod"})
     public void onUse(ServerWorld world, ServerPlayerEntity user, Hand hand, ItemStack stack, ItemStack stackInOtherHand, Contract contract) {
 
     }
 
+    @SuppressWarnings("unused")
     public void onTickForEachPlayer(ServerWorld world, ServerPlayerEntity player){
 
     }
@@ -47,10 +49,12 @@ public abstract class TermsAndConditions implements TermsAndConditionsType{
         return Objects.requireNonNull(TheBindingContracts.TERM_TYPE_REGISTRY.get(id)).typeCreateNew(savedData);
     }
 
+    @SuppressWarnings("unused")
     public TermsAndConditions typeCreateNewExceptions(NbtCompound savedData) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         return this.getClass().getConstructor(NbtCompound.class).newInstance(savedData);
     }
 
+    @SuppressWarnings("unused")
     public TermsAndConditions typeCreateNewExceptions() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         return this.getClass().getConstructor().newInstance();
     }

@@ -10,6 +10,7 @@ public interface TermsAndConditionsType {
 
     Identifier typeGetId();
 
+    @SuppressWarnings("unused")
     default int typeMaxPlayers(){
         return -1;
     }
