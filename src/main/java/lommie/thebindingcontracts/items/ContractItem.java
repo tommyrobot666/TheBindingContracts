@@ -9,16 +9,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,24 +45,33 @@ public class ContractItem extends Item {
         if (hand == Hand.OFF_HAND) return ActionResult.PASS;
         ItemStack stackInOtherHand = user.getStackInHand(Hand.OFF_HAND);
         if (canAddPlayerToContract(contract,user.getUuid())){
-            addPlayerToContract(stack,contract,user,world,user.getBlockPos());
+            addPlayerToContract(stack,contract,user,world);
             return ActionResult.SUCCESS;
         }
         // seal contract
         if (stackInOtherHand.isOf(ModItems.WAX_SEAL) && contract.isValid()){
             stackInOtherHand.decrement(1);
             contract.sign();
+            playSoundToAllSigners(world,contract,SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP);
             return ActionResult.SUCCESS;
         }
         return ActionResult.PASS;
     }
 
-    protected void addPlayerToContract(ItemStack stack, Contract contract, PlayerEntity player, World world, BlockPos pos) {
+    private void playSoundToAllSigners(World world, Contract contract, SoundEvent sound) {
+        for (UUID signer : contract.getSigners()) {
+            PlayerEntity player = world.getPlayerAnyDimension(signer);
+            if (player == null) {continue;}
+            world.playSound(player, player.getBlockPos(), sound, SoundCategory.PLAYERS);
+        }
+    }
+
+    protected void addPlayerToContract(ItemStack stack, Contract contract, PlayerEntity player, World world) {
         contract.addSigner(player.getUuid());
         ArrayList<String> signatures = new ArrayList<>(stack.getOrDefault(ModItemComponents.SIGNATURES,List.of()));
         signatures.add(player.getStringifiedName());
         stack.set(ModItemComponents.SIGNATURES,signatures);
-        world.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.PLAYERS);
+        playSoundToAllSigners(world,contract,SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE);
     }
 
     private boolean canAddPlayerToContract(Contract contract, UUID player){
