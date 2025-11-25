@@ -1,9 +1,9 @@
 package lommie.thebindingcontracts.contract.terms;
 
 import lommie.thebindingcontracts.contract.Contract;
-import lommie.thebindingcontracts.contract.ModTerms;
 import lommie.thebindingcontracts.contract.TwoPlayerTermsAndConditions;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -13,8 +13,9 @@ import net.minecraft.world.TeleportTarget;
 
 public class TeleportTerm extends TwoPlayerTermsAndConditions {
     public TeleportTerm() {
-        super(ModTerms.TELEPORT);
+        NbtCompound savedData = new NbtCompound();
         savedData.putInt("uses_left",10);
+        super(savedData);
     }
 
     @Override

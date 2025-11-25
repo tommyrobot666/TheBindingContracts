@@ -1,9 +1,6 @@
 package lommie.thebindingcontracts.items;
 
 import lommie.thebindingcontracts.TheBindingContracts;
-import lommie.thebindingcontracts.contract.terms.LifeLinkTerm;
-import lommie.thebindingcontracts.contract.terms.TeleportTerm;
-import lommie.thebindingcontracts.contract.terms.TradeTerm;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;

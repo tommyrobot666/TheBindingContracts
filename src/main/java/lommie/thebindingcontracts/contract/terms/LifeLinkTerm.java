@@ -18,10 +18,6 @@ public class LifeLinkTerm extends TermsAndConditions {
             TheBindingContracts.MOD_ID,"contract"
     );
 
-    public LifeLinkTerm() {
-        super(ModTerms.LIFE_LINK);
-    }
-
     @Override
     public void onTickForEachPlayer(ServerWorld world, ServerPlayerEntity player) {
         addAttributeModifier(player);

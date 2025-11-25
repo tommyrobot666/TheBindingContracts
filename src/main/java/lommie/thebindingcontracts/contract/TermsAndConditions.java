@@ -12,61 +12,22 @@ import net.minecraft.util.Identifier;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
-import java.util.Optional;
 
 public abstract class TermsAndConditions {
     public static final Codec<TermsAndConditions> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(Identifier.CODEC.fieldOf("id")
-                                    .forGetter((t) -> t.key),
-                            NbtCompound.CODEC.optionalFieldOf("savedData").forGetter((t) -> {
-                                        try {
-                                            t.getClass().getConstructor(Identifier.class, NbtCompound.class);
-                                            return Optional.of(t.savedData);
-                                        } catch (NoSuchMethodException e) {
-                                            return Optional.empty();
-                                        }})
-            ).apply(instance, (id,savedData) ->
-                            (savedData.isPresent() ? Objects.requireNonNull(TheBindingContracts.TERM_TYPE_REGISTRY.get(id)).newWithData(savedData.orElseThrow()) : createNewHandled(id))
-                    )
+                                    .forGetter(TermsAndConditions::typeGetId),
+                            NbtCompound.CODEC.fieldOf("savedData").forGetter((t) -> t.savedData)
+            ).apply(instance, TermsAndConditions::createNew)
     );
 
-    private TermsAndConditions newWithData(NbtCompound savedData) {
-        try {
-            return this.getClass().getConstructor(Identifier.class, NbtCompound.class).newInstance(this.key, savedData);
-        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static TermsAndConditions createNew(Identifier id) throws Exception {
-        return TheBindingContracts.TERM_TYPE_REGISTRY.get(id).newWith();
-    }
-
-    public static TermsAndConditions createNewHandled(Identifier id){
-        try {
-            return createNew(id);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private TermsAndConditions newWith() {
-        try {
-            return this.getClass().getConstructor().newInstance();
-        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public final NbtCompound savedData;
-    public final Identifier key;
 
-    public TermsAndConditions(Identifier key) {
-        this(key, new NbtCompound());
+    public TermsAndConditions() {
+        this(new NbtCompound());
     }
 
-    public TermsAndConditions(Identifier key, NbtCompound savedData) {
-        this.key = key;
+    public TermsAndConditions(NbtCompound savedData) {
         this.savedData = savedData;
     }
 
@@ -76,5 +37,45 @@ public abstract class TermsAndConditions {
 
     public void onTickForEachPlayer(ServerWorld world, ServerPlayerEntity player){
 
+    }
+
+    public static TermsAndConditions createNew(Identifier id){
+        return Objects.requireNonNull(TheBindingContracts.TERM_TYPE_REGISTRY.get(id)).typeCreateNew();
+    }
+
+    public static TermsAndConditions createNew(Identifier id, NbtCompound savedData){
+        return Objects.requireNonNull(TheBindingContracts.TERM_TYPE_REGISTRY.get(id)).typeCreateNew(savedData);
+    }
+
+    private TermsAndConditions typeCreateNewExceptions(NbtCompound savedData) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        return this.getClass().getConstructor(NbtCompound.class).newInstance(savedData);
+    }
+
+    public TermsAndConditions typeCreateNew(NbtCompound savedData) {
+        try {
+            return typeCreateNewExceptions(savedData);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private TermsAndConditions typeCreateNewExceptions() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        return this.getClass().getConstructor().newInstance();
+    }
+
+    public TermsAndConditions typeCreateNew() {
+        try {
+            return typeCreateNewExceptions();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Identifier typeGetId(){
+        throw new RuntimeException("Term type has no id! (check typeGetId in class)");
+    }
+
+    public int typeMaxPlayers(){
+        return -1;
     }
 }
