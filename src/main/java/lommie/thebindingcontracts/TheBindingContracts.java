@@ -6,6 +6,7 @@ import lommie.thebindingcontracts.contract.TermsAndConditions;
 import lommie.thebindingcontracts.events.ModEvents;
 import lommie.thebindingcontracts.items.ModItemComponents;
 import lommie.thebindingcontracts.items.ModItems;
+import lommie.thebindingcontracts.items.ModTabs;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.registry.Registry;
@@ -32,6 +33,7 @@ public class TheBindingContracts implements ModInitializer {
     public void onInitialize() {
         ModItemComponents.register();
         ModItems.register();
+        ModTabs.register();
         ModTerms.register();
         ModCommands.register();
         ModEvents.register();

@@ -1,7 +1,9 @@
 package lommie.thebindingcontracts.client;
 
+import lommie.thebindingcontracts.TheBindingContracts;
 import lommie.thebindingcontracts.items.ModItemComponents;
 import lommie.thebindingcontracts.items.ModItems;
+import lommie.thebindingcontracts.items.ModTabs;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -38,7 +40,7 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
         public void generateItemModels(ItemModelGenerator m) {
             registerContractModel(ModItems.CONTRACT,m);
             registerContractModel(ModItems.TWO_PLAYER_CONTRACT,m);
-            m.register(ModItems.WAX_SEAL);
+            m.register(ModItems.WAX_SEAL, Models.GENERATED);
         }
 
         public final void registerContractModel(Item item, ItemModelGenerator m){
@@ -67,6 +69,8 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
             b.add(ModItems.CONTRACT, "Contract");
             b.add(ModItems.TWO_PLAYER_CONTRACT, "Contract (between only 2 players)");
             b.add(ModItems.WAX_SEAL, "Wax seal");
+            b.add("itemGroup."+ TheBindingContracts.MOD_ID+".other_items","The Binding UnContracts");
+            b.add("itemGroup."+ TheBindingContracts.MOD_ID+".contracts","The Binding Contracts");
         }
     }
 }
