@@ -14,16 +14,16 @@ public class ModTabs {
                 Identifier.of(TheBindingContracts.MOD_ID,name), builder.build());
     }
 
+    @SuppressWarnings("unused")
     public static final ItemGroup OTHER_ITEMS = register(
             "other_items",
             FabricItemGroup.builder()
                     .displayName(Text.translatable("itemGroup."+TheBindingContracts.MOD_ID+".other_items"))
                     .icon(ModItems.WAX_SEAL::getDefaultStack)
-                    .entries(((context, entries) -> {
-                        entries.add(ModItems.WAX_SEAL.getDefaultStack());
-                    }))
+                    .entries(((context, entries) -> entries.add(ModItems.WAX_SEAL.getDefaultStack())))
     );
 
+    @SuppressWarnings("unused")
     public static final ItemGroup CONTRACTS = register(
             "contracts",
             FabricItemGroup.builder()

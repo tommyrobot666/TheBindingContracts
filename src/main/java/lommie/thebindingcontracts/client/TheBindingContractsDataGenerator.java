@@ -3,7 +3,6 @@ package lommie.thebindingcontracts.client;
 import lommie.thebindingcontracts.TheBindingContracts;
 import lommie.thebindingcontracts.items.ModItemComponents;
 import lommie.thebindingcontracts.items.ModItems;
-import lommie.thebindingcontracts.items.ModTabs;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;

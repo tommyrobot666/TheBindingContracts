@@ -27,6 +27,7 @@ public class LifeLinkTerm extends TermsAndConditions {
         super(new NbtCompound());
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void onTickForEachPlayer(ServerWorld world, ServerPlayerEntity player) {
         addAttributeModifier(player);

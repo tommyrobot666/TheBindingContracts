@@ -78,7 +78,7 @@ public class ContractItem extends Item {
         return !contract.getSigners().contains(player)&&contract.isUnfinished();
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "ExtractMethodRecommender"})
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
         if (stack.getOrDefault(ModItemComponents.BROKEN, false)) {
