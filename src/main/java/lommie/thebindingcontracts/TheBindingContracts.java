@@ -3,6 +3,7 @@ package lommie.thebindingcontracts;
 import lommie.thebindingcontracts.commands.ModCommands;
 import lommie.thebindingcontracts.contract.ModTerms;
 import lommie.thebindingcontracts.contract.TermsAndConditions;
+import lommie.thebindingcontracts.events.ModEvents;
 import lommie.thebindingcontracts.items.ModItemComponents;
 import lommie.thebindingcontracts.items.ModItems;
 import net.fabricmc.api.ModInitializer;
@@ -33,5 +34,6 @@ public class TheBindingContracts implements ModInitializer {
         ModItems.register();
         ModTerms.register();
         ModCommands.register();
+        ModEvents.register();
     }
 }

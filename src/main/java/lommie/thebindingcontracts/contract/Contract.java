@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lommie.thebindingcontracts.items.TwoPlayerContractItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
@@ -63,15 +64,14 @@ public class Contract {
     }
     
     @SuppressWarnings("unused")
-    public void onTick(World world){
-        if (world.isClient()) return;
+    public void onTick(MinecraftServer server){
         for (UUID uuid : signers){
-            PlayerEntity player = world.getPlayerAnyDimension(uuid);
+            ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
             if (player == null){
                 continue;
             }
             for (TermsAndConditions term : terms) {
-                term.onTickForEachPlayer((ServerWorld) world, (ServerPlayerEntity) player);
+                term.onTickForEachPlayer(player.getEntityWorld(), player);
             }
         }
     }

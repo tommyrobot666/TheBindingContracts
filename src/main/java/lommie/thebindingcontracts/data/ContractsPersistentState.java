@@ -3,6 +3,7 @@ package lommie.thebindingcontracts.data;
 import com.mojang.serialization.Codec;
 import lommie.thebindingcontracts.TheBindingContracts;
 import lommie.thebindingcontracts.contract.Contract;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Uuids;
 import net.minecraft.world.PersistentState;
@@ -44,8 +45,18 @@ public class ContractsPersistentState extends PersistentState {
         );
     }
 
+    public static ContractsPersistentState getPersistentStateInServer(MinecraftServer server){
+        return server.getOverworld().getPersistentStateManager().getOrCreate(
+                TYPE
+        );
+    }
+
     public static HashMap<UUID, Contract> getContractsInWorld(ServerWorld world){
         return getPersistentStateInWorld(world).contracts;
+    }
+
+    public static HashMap<UUID, Contract> getContractsInServer(MinecraftServer server){
+        return getPersistentStateInServer(server).contracts;
     }
 
     public static Contract getAContractInWorld(ServerWorld world, UUID id){
