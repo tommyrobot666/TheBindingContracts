@@ -62,7 +62,7 @@ public class ContractItem extends Item {
         for (UUID signer : contract.getSigners()) {
             PlayerEntity player = world.getPlayerAnyDimension(signer);
             if (player == null) {continue;}
-            world.playSound(player, player.getBlockPos(), sound, SoundCategory.PLAYERS);
+            world.playSound(null, player.getBlockPos(), sound, SoundCategory.PLAYERS);
         }
     }
 

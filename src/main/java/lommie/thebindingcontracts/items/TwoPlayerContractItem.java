@@ -33,6 +33,6 @@ public class TwoPlayerContractItem extends ContractItem{
     public void onCraftByPlayer(ItemStack stack, PlayerEntity player) {
         if (player.getEntityWorld().isClient()) return;
         Contract contract = getContract(stack, (ServerWorld) player.getEntityWorld());
-        addPlayerToContract(stack, contract, player, player.getEntityWorld(), player.getBlockPos());
+        addPlayerToContract(stack, contract, player, player.getEntityWorld());
     }
 }
