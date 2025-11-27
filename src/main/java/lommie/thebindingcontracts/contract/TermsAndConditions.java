@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lommie.thebindingcontracts.TheBindingContracts;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
@@ -31,14 +32,22 @@ public abstract class TermsAndConditions implements TermsAndConditionsType{
         this.savedData = savedData;
     }
 
-    @SuppressWarnings({"unused", "EmptyMethod"})
+    @SuppressWarnings("unused")
     public void onUse(ServerWorld world, ServerPlayerEntity user, Hand hand, ItemStack stack, ItemStack stackInOtherHand, Contract contract) {
 
     }
 
-    @SuppressWarnings("unused")
-    public void onTickForEachPlayer(ServerWorld world, ServerPlayerEntity player){
+    public void onTickForEachPlayer(ServerWorld world, ServerPlayerEntity player, Contract contract){
 
+    }
+
+    public void onTermsJustBroken(MinecraftServer server, Contract contract) {
+
+    }
+
+    @SuppressWarnings("unused")
+    public boolean onTermsBrokenTick(MinecraftServer server, Contract contract) {
+        return true;
     }
 
     public static TermsAndConditions createNew(Identifier id){

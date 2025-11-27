@@ -26,11 +26,11 @@ public class TickEvents {
                 contract.onTick(server);
                 // no longer valid = broken
                 if (contract.isBroken()){
-                    contract.onTermsJustBroken();
+                    contract.onTermsJustBroken(server);
                 }
             } else if (contract.isBroken()) {
                 // only add contract to forRemoval if it's 100% done with its on broken
-                boolean forRemoval = contract.onTermsBrokenTick();
+                boolean forRemoval = contract.onTermsBrokenTick(server);
                 if (forRemoval) {
                     contractsToRemove.add(contract);
                 }

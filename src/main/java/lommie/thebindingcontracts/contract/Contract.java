@@ -71,18 +71,27 @@ public class Contract {
                 continue;
             }
             for (TermsAndConditions term : terms) {
-                term.onTickForEachPlayer(player.getEntityWorld(), player);
+                term.onTickForEachPlayer(player.getEntityWorld(), player, this);
             }
         }
     }
 
     @SuppressWarnings({"unused", "EmptyMethod"})
-    public void onTermsJustBroken(){}
+    public void onTermsJustBroken(MinecraftServer server){
+        for (TermsAndConditions term : terms) {
+            term.onTermsJustBroken(server, this);
+        }
+    }
 
     /// @return is onBroken done?
     @SuppressWarnings({"unused", "SameReturnValue"})
-    public boolean onTermsBrokenTick(){
-        return true;
+    public boolean onTermsBrokenTick(MinecraftServer server){
+        boolean done = true;
+        for (TermsAndConditions term : terms){
+            boolean termDone = term.onTermsBrokenTick(server, this);
+            done = done && termDone;
+        }
+        return done;
     }
 
     public void addTerm(TermsAndConditions term){
