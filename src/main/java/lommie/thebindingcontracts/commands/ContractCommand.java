@@ -15,7 +15,7 @@ import java.util.UUID;
 public class ContractCommand {
     public static int TermModification(CommandContext<ServerCommandSource> source) {
         UUID contractId = source.getArgument("id",UUID.class);
-        ContractCommandTermAction action = source.getArgument("action", ContractCommandTermAction.class);
+        ContractCommandTermAction action = source.getArgument("term_action", ContractCommandTermAction.class);
         Identifier termId = source.getArgument("term", Identifier.class);
         switch (action){
             case ADD_TERM ->
@@ -44,7 +44,7 @@ public class ContractCommand {
 
     public static int SignersModification(CommandContext<ServerCommandSource> source) {
         UUID contractId = source.getArgument("id",UUID.class);
-        ContractCommandSignerAction action = source.getArgument("action", ContractCommandSignerAction.class);
+        ContractCommandSignerAction action = source.getArgument("signer_action", ContractCommandSignerAction.class);
         switch (action){
             case ADD_SIGNER ->
             {
@@ -72,7 +72,7 @@ public class ContractCommand {
 
     public static int StateModification(CommandContext<ServerCommandSource> source) {
         UUID contractId = source.getArgument("id",UUID.class);
-        ContractCommandStateAction action = source.getArgument("action", ContractCommandStateAction.class);
+        ContractCommandStateAction action = source.getArgument("state_action", ContractCommandStateAction.class);
         boolean bool = source.getArgument("bool", boolean.class);
         switch (action){
             case SET_BROKEN ->

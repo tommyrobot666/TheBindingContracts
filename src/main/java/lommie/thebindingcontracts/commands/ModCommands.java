@@ -31,8 +31,8 @@ public class ModCommands {
         );
         ArgumentTypeRegistry.registerArgumentType(
                 Identifier.of(TheBindingContracts.MOD_ID,"contracts_command_state_actions"),
-                ContractCommandTermActionArgumentType.class,
-                new ContractCommandTermActionArgumentType.Serializer()
+                ContractCommandStateActionArgumentType.class,
+                new ContractCommandStateActionArgumentType.Serializer()
         );
         registerEvent();
     }
@@ -44,22 +44,27 @@ public class ModCommands {
     private static void commandRegisterEvent(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(CommandManager.literal("contracts")
                 .then(CommandManager.argument("id", new UuidArgumentType())
-                                .suggests(new ContractIdSuggestions())
-                        .then(CommandManager.argument("action", new ContractCommandTermActionArgumentType())
+                        .suggests(new ContractIdSuggestions())
+                        .then(CommandManager.argument("term_action", new ContractCommandTermActionArgumentType())
                                 .suggests(new ContractCommandTermActionArgumentType())
                                 .then(CommandManager.argument("term", new RegisteredTermArgumentType())
                                         .suggests(new RegisteredTermArgumentType())
-                                        .executes(ContractCommand::TermModification)))
-                        .then(CommandManager.argument("action", new ContractCommandSignerActionArgumentType())
+                                        .executes(ContractCommand::TermModification)
+                                )
+                        )
+                        .then(CommandManager.argument("signer_action", new ContractCommandSignerActionArgumentType())
                                 .then(CommandManager.argument("player", EntityArgumentType.player())
                                         .suggests(new ContractSignersSuggestions())
                                         .executes(ContractCommand::SignersModification)
+                                )
                         )
-                        .then(CommandManager.argument("action", new ContractCommandStateActionArgumentType())
+                        .then(CommandManager.argument("state_action", new ContractCommandStateActionArgumentType())
                                 .then(CommandManager.argument("bool", BoolArgumentType.bool())
-                                        .executes(ContractCommand::StateModification)))
+                                        .executes(ContractCommand::StateModification)
+                                )
                         )
-        ));
+                )
+        );
     }
 
 

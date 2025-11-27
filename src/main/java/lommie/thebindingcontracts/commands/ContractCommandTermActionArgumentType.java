@@ -41,10 +41,6 @@ public class ContractCommandTermActionArgumentType implements ArgumentType<Contr
         return CompletableFuture.completedFuture(builder
                 .suggest("add_term")
                 .suggest("remove_term")
-                .suggest("add_signer")
-                .suggest("remove_signer")
-                .suggest("set_signed")
-                .suggest("set_broken")
                 .build());
     }
 

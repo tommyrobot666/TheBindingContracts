@@ -39,10 +39,6 @@ public class ContractCommandStateActionArgumentType implements ArgumentType<Cont
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         return CompletableFuture.completedFuture(builder
-                .suggest("add_term")
-                .suggest("remove_term")
-                .suggest("add_signer")
-                .suggest("remove_signer")
                 .suggest("set_signed")
                 .suggest("set_broken")
                 .build());
