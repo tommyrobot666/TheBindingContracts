@@ -40,7 +40,9 @@ public class RegisteredTermArgumentType implements ArgumentType<Identifier>, Sug
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         for (Identifier id : TheBindingContracts.TERM_TYPE_REGISTRY.getIds()) {
-            builder.suggest(id.toString());
+            if (id.toString().startsWith(builder.getRemainingLowerCase())) {
+                builder.suggest(id.toString());
+            }
         }
         return builder.buildFuture();
     }

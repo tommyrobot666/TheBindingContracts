@@ -126,4 +126,30 @@ public class Contract {
     public List<UUID> getSigners(){
         return signers;
     }
+
+    public String listTermIds() {
+        StringBuilder builder = new StringBuilder();
+        for (TermsAndConditions term : terms) {
+            builder.append(term.typeGetId().toString());
+            builder.append(", ");
+        }
+        return builder.toString();
+    }
+
+    public String listSignerIds() {
+        StringBuilder builder = new StringBuilder();
+        for (UUID signer : signers) {
+            builder.append(signer.toString());
+            builder.append(", ");
+        }
+        return builder.toString();
+    }
+
+    public void forceSetBroken(boolean val) {
+        broken = val;
+    }
+
+    public void forceSetSigned(boolean val) {
+        signed = val;
+    }
 }

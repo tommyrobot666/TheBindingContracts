@@ -17,13 +17,13 @@ import net.minecraft.text.Text;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ContractCommandActionArgumentType implements ArgumentType<ContractCommandAction>, SuggestionProvider<ServerCommandSource> {
+public class ContractCommandStateActionArgumentType implements ArgumentType<ContractCommandStateAction>, SuggestionProvider<ServerCommandSource> {
     static final SimpleCommandExceptionType ERROR = new SimpleCommandExceptionType(Text.literal("Action not found"));
 
     @Override
-    public ContractCommandAction parse(StringReader stringReader) throws CommandSyntaxException {
+    public ContractCommandStateAction parse(StringReader stringReader) throws CommandSyntaxException {
         String value = stringReader.readString().strip().toLowerCase();
-        for (ContractCommandAction action : ContractCommandAction.values()){
+        for (ContractCommandStateAction action : ContractCommandStateAction.values()){
             if (value.contains(action.getName())){
                 return action;
             }
@@ -48,26 +48,26 @@ public class ContractCommandActionArgumentType implements ArgumentType<ContractC
                 .build());
     }
 
-    public static class Serializer implements ArgumentSerializer<ContractCommandActionArgumentType, Serializer.Properties> {
+    public static class Serializer implements ArgumentSerializer<ContractCommandStateActionArgumentType, Serializer.Properties> {
         @Override
-        public void writePacket(Serializer.Properties properties, PacketByteBuf buf) {}
+        public void writePacket(Properties properties, PacketByteBuf buf) {}
 
         @Override
-        public Serializer.Properties fromPacket(PacketByteBuf buf) {return new Serializer.Properties();}
+        public Properties fromPacket(PacketByteBuf buf) {return new Properties();}
 
         @Override
-        public Serializer.Properties getArgumentTypeProperties(ContractCommandActionArgumentType argumentType) {return new Serializer.Properties();}
+        public Properties getArgumentTypeProperties(ContractCommandStateActionArgumentType argumentType) {return new Properties();}
 
         @Override
-        public void writeJson(Serializer.Properties properties, JsonObject json) {}
+        public void writeJson(Properties properties, JsonObject json) {}
 
-        public final class Properties implements ArgumentSerializer.ArgumentTypeProperties<ContractCommandActionArgumentType>{
+        public final class Properties implements ArgumentTypeProperties<ContractCommandStateActionArgumentType>{
 
             @Override
-            public ContractCommandActionArgumentType createType(CommandRegistryAccess commandRegistryAccess) {return new ContractCommandActionArgumentType();}
+            public ContractCommandStateActionArgumentType createType(CommandRegistryAccess commandRegistryAccess) {return new ContractCommandStateActionArgumentType();}
 
             @Override
-            public ArgumentSerializer<ContractCommandActionArgumentType, ?> getSerializer() {return Serializer.this;}
+            public ArgumentSerializer<ContractCommandStateActionArgumentType, ?> getSerializer() {return Serializer.this;}
         }
     }
 }

@@ -1,10 +1,12 @@
 package lommie.thebindingcontracts.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import lommie.thebindingcontracts.TheBindingContracts;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.CommandRegistryAccess;
+import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.UuidArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -18,9 +20,19 @@ public class ModCommands {
                 new RegisteredTermArgumentType.Serializer()
         );
         ArgumentTypeRegistry.registerArgumentType(
-                Identifier.of(TheBindingContracts.MOD_ID,"contracts_command_actions"),
-                ContractCommandActionArgumentType.class,
-                new ContractCommandActionArgumentType.Serializer()
+                Identifier.of(TheBindingContracts.MOD_ID,"contracts_command_term_actions"),
+                ContractCommandTermActionArgumentType.class,
+                new ContractCommandTermActionArgumentType.Serializer()
+        );
+        ArgumentTypeRegistry.registerArgumentType(
+                Identifier.of(TheBindingContracts.MOD_ID,"contracts_command_signer_actions"),
+                ContractCommandSignerActionArgumentType.class,
+                new ContractCommandSignerActionArgumentType.Serializer()
+        );
+        ArgumentTypeRegistry.registerArgumentType(
+                Identifier.of(TheBindingContracts.MOD_ID,"contracts_command_state_actions"),
+                ContractCommandTermActionArgumentType.class,
+                new ContractCommandTermActionArgumentType.Serializer()
         );
         registerEvent();
     }
@@ -29,24 +41,25 @@ public class ModCommands {
         CommandRegistrationCallback.EVENT.register(ModCommands::commandRegisterEvent);
     }
 
-    @SuppressWarnings("unused")
     private static void commandRegisterEvent(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(CommandManager.literal("contracts")
                 .then(CommandManager.argument("id", new UuidArgumentType())
                                 .suggests(new ContractIdSuggestions())
-                //TODO: allow only valid contract id. suggest one in hand, then others in inventory
-                    .then(CommandManager.argument("action", new ContractCommandActionArgumentType())
-                            .suggests(new ContractCommandActionArgumentType())
-                            .then(CommandManager.argument("term", new RegisteredTermArgumentType())
-                                    .suggests(new RegisteredTermArgumentType())
-                                    .executes(ContractCommand::TermModification))
-                            /*.then(CommandManager.argument("player", EntityArgumentType.player())
-                                    //TODO: suggest ids and player names that have signed the contract
-                                    .suggests((commandContext, suggestionsBuilder) -> suggestionsBuilder.buildFuture())
-                                    .executes(commandContext -> 1)) //TODO: add ContractCommand::SignersModification
-                            .then(CommandManager.argument("bool", BoolArgumentType.bool())
-                                    .executes(commandContext -> 1))*/) //TODO: add ContractCommand::StateModification
-                ));
+                        .then(CommandManager.argument("action", new ContractCommandTermActionArgumentType())
+                                .suggests(new ContractCommandTermActionArgumentType())
+                                .then(CommandManager.argument("term", new RegisteredTermArgumentType())
+                                        .suggests(new RegisteredTermArgumentType())
+                                        .executes(ContractCommand::TermModification)))
+                        .then(CommandManager.argument("action", new ContractCommandSignerActionArgumentType())
+                                .then(CommandManager.argument("player", EntityArgumentType.player())
+                                        .suggests(new ContractSignersSuggestions())
+                                        .executes(ContractCommand::SignersModification)
+                        )
+                        .then(CommandManager.argument("action", new ContractCommandStateActionArgumentType())
+                                .then(CommandManager.argument("bool", BoolArgumentType.bool())
+                                        .executes(ContractCommand::StateModification)))
+                        )
+        ));
     }
 
 
