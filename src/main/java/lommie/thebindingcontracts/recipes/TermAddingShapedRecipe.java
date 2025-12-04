@@ -31,6 +31,13 @@ public class TermAddingShapedRecipe extends ShapedRecipe {
     @Override
     public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup wrapperLookup) {
         ItemStack stack = super.craft(craftingRecipeInput, wrapperLookup);
+        for (ItemStack craftingRecipeInputStack : craftingRecipeInput.getStacks()) {
+            if (stack.hasChangedComponent(ModItemComponents.CONTRACT_ID)){
+                stack = craftingRecipeInputStack;
+                break;
+            }
+        }
+
         ArrayList<TermsAndConditions> termsToAddOnNextTick = new ArrayList<>(stack.getOrDefault(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK, List.of()));
         termsToAddOnNextTick.add(TermsAndConditions.createNew(term.typeGetId(),term.savedData));
         stack.set(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK, termsToAddOnNextTick);
@@ -63,7 +70,7 @@ public class TermAddingShapedRecipe extends ShapedRecipe {
 
         @Override
         public PacketCodec<RegistryByteBuf, TermAddingShapedRecipe> packetCodec() {
-            return null;
+            return PACKET_CODEC;
         }
     }
 

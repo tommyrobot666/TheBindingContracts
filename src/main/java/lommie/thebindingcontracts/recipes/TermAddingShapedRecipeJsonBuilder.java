@@ -111,7 +111,7 @@ public class TermAddingShapedRecipeJsonBuilder implements CraftingRecipeJsonBuil
         this.criteria.forEach(builder::criterion);
         ShapedRecipe shapedRecipe = new ShapedRecipe(Objects.requireNonNullElse(this.group, ""), CraftingRecipeJsonBuilder.toCraftingCategory(this.category), rawShapedRecipe, new ItemStack(this.output, this.count), this.showNotification);
         TermAddingShapedRecipe recipe = TermAddingShapedRecipe.fromShaped(shapedRecipe, this.term);
-        exporter.accept(recipeKey, shapedRecipe, builder.build(recipeKey.getValue().withPrefixedPath("recipes/" + this.category.getName() + "/")));
+        exporter.accept(recipeKey, recipe, builder.build(recipeKey.getValue().withPrefixedPath("recipes/" + this.category.getName() + "/")));
     }
 
     private RawShapedRecipe validate(RegistryKey<Recipe<?>> recipeKey) {
