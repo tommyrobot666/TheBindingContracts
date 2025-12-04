@@ -2,6 +2,7 @@ package lommie.thebindingcontracts.items;
 
 import com.mojang.serialization.Codec;
 import lommie.thebindingcontracts.TheBindingContracts;
+import lommie.thebindingcontracts.contract.TermsAndConditions;
 import net.minecraft.component.ComponentType;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.RegistryByteBuf;
@@ -36,6 +37,12 @@ public class ModItemComponents {
 
     public static final ComponentType<Boolean> VALID = register("valid",
             new ComponentType.Builder<Boolean>().codec(Codec.BOOL).packetCodec(PacketCodec.of((b, buf) -> buf.writeBoolean(b),RegistryByteBuf::readBoolean)).build());
+
+    public static final ComponentType<List<TermsAndConditions>> TERMS_TO_ADD_ON_NEXT_TICK = register("terms_to_add_on_next_tick",
+            ComponentType.<List<TermsAndConditions>>builder().codec(TermsAndConditions.CODEC.listOf()).packetCodec(PacketCodec.of(
+                    ((termsAndConditionsList, buf) -> buf.writeCollection(termsAndConditionsList,(b,t) -> TermsAndConditions.PACKET_CODEC.encode((RegistryByteBuf) b,t))),
+                    (buf -> buf.readCollection(ArrayList::new,(b) -> TermsAndConditions.PACKET_CODEC.decode((RegistryByteBuf) b)))
+            )).build());
 
     @SuppressWarnings("EmptyMethod")
     public static void register(){}

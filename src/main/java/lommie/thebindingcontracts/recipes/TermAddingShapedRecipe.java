@@ -2,7 +2,10 @@ package lommie.thebindingcontracts.recipes;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import lommie.thebindingcontracts.contract.Contract;
 import lommie.thebindingcontracts.contract.TermsAndConditions;
+import lommie.thebindingcontracts.items.ContractItem;
+import lommie.thebindingcontracts.items.ModItemComponents;
 import lommie.thebindingcontracts.mixin.ShapedRecipeAccessor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
@@ -11,6 +14,11 @@ import net.minecraft.recipe.RawShapedRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
+import net.minecraft.recipe.input.CraftingRecipeInput;
+import net.minecraft.registry.RegistryWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TermAddingShapedRecipe extends ShapedRecipe {
     private final TermsAndConditions term;
@@ -18,6 +26,15 @@ public class TermAddingShapedRecipe extends ShapedRecipe {
     public TermAddingShapedRecipe(TermsAndConditions term, String group, CraftingRecipeCategory category, RawShapedRecipe raw, ItemStack result, boolean showNotification) {
         super(group, category, raw, result, showNotification);
         this.term = term;
+    }
+
+    @Override
+    public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup wrapperLookup) {
+        ItemStack stack = super.craft(craftingRecipeInput, wrapperLookup);
+        ArrayList<TermsAndConditions> termsToAddOnNextTick = new ArrayList<>(stack.getOrDefault(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK, List.of()));
+        termsToAddOnNextTick.add(TermsAndConditions.createNew(term.typeGetId(),term.savedData));
+        stack.set(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK, termsToAddOnNextTick);
+        return stack;
     }
 
     public static class Serializer implements RecipeSerializer<TermAddingShapedRecipe> {
@@ -50,7 +67,7 @@ public class TermAddingShapedRecipe extends ShapedRecipe {
         }
     }
 
-    private static TermAddingShapedRecipe fromShaped(ShapedRecipe shapedRecipe, TermsAndConditions term) {
+    public static TermAddingShapedRecipe fromShaped(ShapedRecipe shapedRecipe, TermsAndConditions term) {
         return new TermAddingShapedRecipe(term, shapedRecipe.getGroup(), shapedRecipe.getCategory(), ((ShapedRecipeAccessor) shapedRecipe).getRaw(),((ShapedRecipeAccessor) shapedRecipe).getResult(), shapedRecipe.showNotification());
     }
 

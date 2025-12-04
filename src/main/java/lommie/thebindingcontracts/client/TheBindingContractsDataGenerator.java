@@ -1,16 +1,26 @@
 package lommie.thebindingcontracts.client;
 
 import lommie.thebindingcontracts.TheBindingContracts;
+import lommie.thebindingcontracts.contract.terms.LifeLinkTerm;
 import lommie.thebindingcontracts.items.ModItemComponents;
 import lommie.thebindingcontracts.items.ModItems;
+import lommie.thebindingcontracts.recipes.TermAddingShapedRecipeJsonBuilder;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.client.data.*;
 import net.minecraft.client.render.item.model.ItemModel;
+import net.minecraft.data.recipe.RecipeExporter;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.potion.Potions;
+import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.registry.RegistryEntryLookup;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
@@ -70,6 +80,38 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
             b.add(ModItems.WAX_SEAL, "Wax seal");
             b.add("itemGroup."+ TheBindingContracts.MOD_ID+".other_items","The Binding UnContracts");
             b.add("itemGroup."+ TheBindingContracts.MOD_ID+".contracts","The Binding Contracts");
+        }
+    }
+
+    private static class RecipeGenerator extends FabricRecipeProvider{
+
+        public RecipeGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+            super(output, registriesFuture);
+        }
+
+        @Override
+        protected net.minecraft.data.recipe.RecipeGenerator getRecipeGenerator(RegistryWrapper.WrapperLookup lookup, RecipeExporter exporter) {
+            return new net.minecraft.data.recipe.RecipeGenerator(lookup, exporter) {
+                @Override
+                public void generate() {
+                    RegistryEntryLookup<Item> itemLookup = registries.getOrThrow(RegistryKeys.ITEM);
+
+                    TermAddingShapedRecipeJsonBuilder.create(
+                            new LifeLinkTerm(),
+                            itemLookup,
+                            RecipeCategory.MISC,
+                            ModItems.CONTRACT)
+                            .pattern("*!*")
+                            .input('*', Items.NETHER_STAR)
+                            .input('!', ModItems.CONTRACT)
+                            .offerTo(exporter);
+                }
+            };
+        }
+
+        @Override
+        public String getName() {
+            return TheBindingContracts.MOD_ID;
         }
     }
 }

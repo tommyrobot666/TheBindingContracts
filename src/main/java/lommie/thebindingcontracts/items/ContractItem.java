@@ -1,6 +1,7 @@
 package lommie.thebindingcontracts.items;
 
 import lommie.thebindingcontracts.contract.Contract;
+import lommie.thebindingcontracts.contract.TermsAndConditions;
 import lommie.thebindingcontracts.data.ContractsPersistentState;
 import net.minecraft.component.type.TooltipDisplayComponent;
 import net.minecraft.entity.Entity;
@@ -29,6 +30,10 @@ public class ContractItem extends Item {
 
     public ContractItem(Settings settings) {
         super(settings);
+    }
+
+    public ContractItem(Settings settings, List<TermsAndConditions> startingTerms) {
+        super(settings.component(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK, startingTerms));
     }
 
     @Override
@@ -138,6 +143,16 @@ public class ContractItem extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
+        if (stack.hasChangedComponent(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK)) {
+            List<TermsAndConditions> termsToAddOnNextTick = stack.get(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK);
+            Contract contract = getContract(stack, world);
+            assert termsToAddOnNextTick != null;
+            for (TermsAndConditions term : termsToAddOnNextTick) {
+                contract.addTerm(term);
+            }
+            stack.remove(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK);
+        }
+
         if (!stack.hasChangedComponent(ModItemComponents.CONTRACT_ID)) return;
         // check contract state
         Contract contract = getContractNoDirty(stack, world);
