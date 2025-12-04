@@ -2,9 +2,7 @@ package lommie.thebindingcontracts.recipes;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import lommie.thebindingcontracts.contract.Contract;
 import lommie.thebindingcontracts.contract.TermsAndConditions;
-import lommie.thebindingcontracts.items.ContractItem;
 import lommie.thebindingcontracts.items.ModItemComponents;
 import lommie.thebindingcontracts.mixin.ShapedRecipeAccessor;
 import net.minecraft.item.ItemStack;
@@ -37,7 +35,7 @@ public class TermAddingShapedRecipe extends ShapedRecipe {
                 break;
             }
         }
-
+//TODO: figure out why this acts just like a normal shaped recipe
         ArrayList<TermsAndConditions> termsToAddOnNextTick = new ArrayList<>(stack.getOrDefault(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK, List.of()));
         termsToAddOnNextTick.add(TermsAndConditions.createNew(term.typeGetId(),term.savedData));
         stack.set(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK, termsToAddOnNextTick);

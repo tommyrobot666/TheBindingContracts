@@ -11,13 +11,13 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.advancement.AdvancementCriterion;
+import net.minecraft.advancement.criterion.Criterion;
 import net.minecraft.client.data.*;
 import net.minecraft.client.render.item.model.ItemModel;
 import net.minecraft.data.recipe.RecipeExporter;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.potion.Potions;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKeys;
@@ -32,6 +32,7 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
         pack.addProvider(ModelGenerator::new);
         pack.addProvider(EnUsLanguageGenerator::new);
+        pack.addProvider(RecipeGenerator::new);
     }
 
     private static class ModelGenerator extends FabricModelProvider{
@@ -101,6 +102,7 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
                             itemLookup,
                             RecipeCategory.MISC,
                             ModItems.CONTRACT)
+                            .criterion(hasItem(Items.NETHER_STAR),conditionsFromItem(Items.NETHER_STAR))
                             .pattern("*!*")
                             .input('*', Items.NETHER_STAR)
                             .input('!', ModItems.CONTRACT)
