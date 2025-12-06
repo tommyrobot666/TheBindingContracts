@@ -47,8 +47,7 @@ public class Contract {
 
 
         TermsAndConditions term = terms.get(selectedTerm);
-        if (term.getClass().getSuperclass().equals(TwoPlayerTermsAndConditions.class) && other != null) {
-            TwoPlayerTermsAndConditions twoPlayerTerm = ((TwoPlayerTermsAndConditions) term);
+        if (term instanceof TwoPlayerTermsAndConditions<?> twoPlayerTerm && other != null) {
             twoPlayerTerm.onUseWhenOtherIsOnline((ServerWorld) world, (ServerPlayerEntity) user, other, hand, stack, stackInOtherHand, this);
         } else {
             term.onUse((ServerWorld) world, (ServerPlayerEntity) user, hand, stack, stackInOtherHand, this);

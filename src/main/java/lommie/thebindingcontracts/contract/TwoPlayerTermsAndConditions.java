@@ -6,18 +6,12 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 
-public abstract class TwoPlayerTermsAndConditions extends TermsAndConditions{
-    public TwoPlayerTermsAndConditions(NbtCompound savedData) {
-        super(savedData);
-    }
-
+public interface TwoPlayerTermsAndConditions<T extends TermsAndConditions> extends TermsAndConditionsType{
     @SuppressWarnings("unused")
-    public void onUseWhenOtherIsOnline(ServerWorld world, ServerPlayerEntity user, ServerPlayerEntity other, Hand hand, ItemStack stack, ItemStack stackInOtherHand, Contract contract) {
-
-    }
+    void onUseWhenOtherIsOnline(ServerWorld world, ServerPlayerEntity user, ServerPlayerEntity other, Hand hand, ItemStack stack, ItemStack stackInOtherHand, Contract contract);
 
     @Override
-    public int typeMaxPlayers() {
+    default int typeMaxPlayers() {
         return 2;
     }
 }

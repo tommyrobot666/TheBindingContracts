@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 
-public class TeleportTerm extends TwoPlayerTermsAndConditions {
+public class TeleportTerm extends TermsAndConditions implements TwoPlayerTermsAndConditions<TeleportTerm> {
     public TeleportTerm(NbtCompound savedData) {
         super(savedData);
     }
