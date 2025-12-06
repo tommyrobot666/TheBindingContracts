@@ -19,5 +19,6 @@ public class ModRecipeTypes {
         return Registry.register(Registries.RECIPE_TYPE, Identifier.of(TheBindingContracts.MOD_ID, name), type);
     }
 
+    @SuppressWarnings("EmptyMethod")
     public static void register(){}
 }

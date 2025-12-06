@@ -32,6 +32,7 @@ public class ContractItem extends Item {
         super(settings);
     }
 
+    @SuppressWarnings("unused")
     public ContractItem(Settings settings, List<TermsAndConditions> startingTerms) {
         super(settings.component(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK, startingTerms));
     }

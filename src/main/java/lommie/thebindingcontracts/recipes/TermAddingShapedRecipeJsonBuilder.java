@@ -57,6 +57,7 @@ public class TermAddingShapedRecipeJsonBuilder implements CraftingRecipeJsonBuil
         return new TermAddingShapedRecipeJsonBuilder(term, registryLookup, category, output, count);
     }
 
+    @SuppressWarnings("unused")
     public TermAddingShapedRecipeJsonBuilder input(Character c, TagKey<Item> tag) {
         return this.input(c, Ingredient.ofTag(this.registryLookup.getOrThrow(tag)));
     }
@@ -77,7 +78,7 @@ public class TermAddingShapedRecipeJsonBuilder implements CraftingRecipeJsonBuil
     }
 
     public TermAddingShapedRecipeJsonBuilder pattern(String patternStr) {
-        if (!this.pattern.isEmpty() && patternStr.length() != ((String)this.pattern.get(0)).length()) {
+        if (!this.pattern.isEmpty() && patternStr.length() != this.pattern.getFirst().length()) {
             throw new IllegalArgumentException("Pattern must be the same width on every line!");
         } else {
             this.pattern.add(patternStr);
@@ -95,6 +96,7 @@ public class TermAddingShapedRecipeJsonBuilder implements CraftingRecipeJsonBuil
         return this;
     }
 
+    @SuppressWarnings("unused")
     public TermAddingShapedRecipeJsonBuilder showNotification(boolean showNotification) {
         this.showNotification = showNotification;
         return this;
@@ -116,7 +118,7 @@ public class TermAddingShapedRecipeJsonBuilder implements CraftingRecipeJsonBuil
 
     private RawShapedRecipe validate(RegistryKey<Recipe<?>> recipeKey) {
         if (this.criteria.isEmpty()) {
-            throw new IllegalStateException("No way of obtaining recipe " + String.valueOf(recipeKey.getValue()));
+            throw new IllegalStateException("No way of obtaining recipe " + recipeKey.getValue());
         } else {
             return RawShapedRecipe.create(this.inputs, this.pattern);
         }

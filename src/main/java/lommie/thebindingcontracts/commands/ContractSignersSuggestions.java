@@ -1,7 +1,6 @@
 package lommie.thebindingcontracts.commands;
 
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
@@ -16,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ContractSignersSuggestions implements SuggestionProvider<ServerCommandSource> {
     @Override
-    public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> commandContext, SuggestionsBuilder suggestionsBuilder) throws CommandSyntaxException {
+    public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> commandContext, SuggestionsBuilder suggestionsBuilder) {
         UUID contractId = commandContext.getArgument("id",UUID.class);
         Contract contract = ContractsPersistentState.getAContractInWorld(commandContext.getSource().getWorld(),contractId);
         ArrayList<String> allSigners = new ArrayList<>();
