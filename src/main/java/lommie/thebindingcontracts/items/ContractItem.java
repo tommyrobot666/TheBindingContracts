@@ -156,6 +156,10 @@ public class ContractItem extends Item {
             playSoundToAllSigners(world,contract,SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT);
         }
 
+        updateItemComponents(stack, world);
+    }
+
+    private static void updateItemComponents(ItemStack stack, ServerWorld world) {
         if (!stack.hasChangedComponent(ModItemComponents.CONTRACT_ID)) return;
         // check contract state
         Contract contract = getContractNoDirty(stack, world);

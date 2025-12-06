@@ -52,4 +52,9 @@ public class TradeTerm extends TermsAndConditions implements TwoPlayerTermsAndCo
     public Identifier typeGetId() {
         return ModTerms.TRADE;
     }
+
+    @Override
+    public boolean typeHasAction() {
+        return true;
+    }
 }

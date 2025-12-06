@@ -54,4 +54,9 @@ public class TeleportTerm extends TermsAndConditions implements TwoPlayerTermsAn
     public Identifier typeGetId() {
         return ModTerms.TELEPORT;
     }
+
+    @Override
+    public boolean typeHasAction() {
+        return true;
+    }
 }

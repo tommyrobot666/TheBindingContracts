@@ -9,12 +9,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Uuids;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Contract {
     public static final Codec<Contract> CODEC = RecordCodecBuilder.create((instance) ->
@@ -159,5 +158,16 @@ public class Contract {
 
     public void forceSetSigned(boolean val) {
         signed = val;
+    }
+
+    public Map<Integer,Identifier> getTermsWithActionsAndIndex() {
+        HashMap<Integer,Identifier> termsWithActions = new HashMap<>(terms.size());
+        for (int i = 0; i < terms.size(); i++) {
+            TermsAndConditions term = terms.get(i);
+            if (term.typeHasAction()){
+                termsWithActions.put(i,term.typeGetId());
+            }
+        }
+        return termsWithActions;
     }
 }

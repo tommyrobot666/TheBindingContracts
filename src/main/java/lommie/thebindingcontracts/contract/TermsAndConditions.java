@@ -10,10 +10,13 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -83,5 +86,13 @@ public abstract class TermsAndConditions implements TermsAndConditionsType{
     @SuppressWarnings("unused")
     public TermsAndConditions typeCreateNewExceptions() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         return this.getClass().getConstructor().newInstance();
+    }
+
+    public static List<Text> listToDisplayText(List<TermsAndConditions> terms){
+        ArrayList<Text> texts = new ArrayList<>(terms.size());
+        for (TermsAndConditions term : terms) {
+            texts.add(term.typeGetDisplayName());
+        }
+        return texts;
     }
 }
