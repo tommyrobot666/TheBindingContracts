@@ -27,15 +27,21 @@ public class TermAddingShapedRecipe extends ShapedRecipe {
     }
 
     @Override
+    public RecipeSerializer<? extends ShapedRecipe> getSerializer() {
+        return ModRecipeSerializers.TERM_ADDING_SHAPED_RECIPE;
+    }
+
+    @Override
     public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup wrapperLookup) {
         ItemStack stack = super.craft(craftingRecipeInput, wrapperLookup);
+        //TODO: figure out why it just creates a new contract instead of finding the old one
         for (ItemStack craftingRecipeInputStack : craftingRecipeInput.getStacks()) {
             if (stack.hasChangedComponent(ModItemComponents.CONTRACT_ID)){
                 stack = craftingRecipeInputStack;
                 break;
             }
         }
-//TODO: figure out why this acts just like a normal shaped recipe
+
         ArrayList<TermsAndConditions> termsToAddOnNextTick = new ArrayList<>(stack.getOrDefault(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK, List.of()));
         termsToAddOnNextTick.add(TermsAndConditions.createNew(term.typeGetId(),term.savedData));
         stack.set(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK, termsToAddOnNextTick);
