@@ -152,6 +152,8 @@ public class ContractItem extends Item {
                 contract.addTerm(term);
             }
             stack.remove(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK);
+
+            playSoundToAllSigners(world,contract,SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT);
         }
 
         if (!stack.hasChangedComponent(ModItemComponents.CONTRACT_ID)) return;
