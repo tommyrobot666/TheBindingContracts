@@ -51,8 +51,8 @@ public class TermAddingShapedRecipe extends ShapedRecipe {
     private static ItemStack getContractItemInGrid(CraftingRecipeInput craftingRecipeInput, ItemStack stack) {
         if (craftingRecipeInput == null) return stack;
         for (ItemStack craftingRecipeInputStack : craftingRecipeInput.getStacks()) {
-            if (stack.hasChangedComponent(ModItemComponents.CONTRACT_ID)){
-                stack = craftingRecipeInputStack;
+            if (craftingRecipeInputStack.hasChangedComponent(ModItemComponents.CONTRACT_ID)){
+                stack = craftingRecipeInputStack.copy();
                 break;
             }
         }
