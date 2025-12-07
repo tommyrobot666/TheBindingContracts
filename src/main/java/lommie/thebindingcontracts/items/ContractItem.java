@@ -43,9 +43,47 @@ public class ContractItem extends Item {
     @Override
     public ActionResult use(World world, PlayerEntity user, Hand hand) {
         if (world.isClient()) return ActionResult.PASS;
+
         ItemStack stack = user.getStackInHand(hand);
 
-        // change selected term
+        int selectedTerm = tryCycleToNextActionableTerm(user, stack);
+        Contract contract = getContract(stack, (ServerWorld) world);
+        useContract(world, user, hand, contract, selectedTerm);
+
+        if (hand == Hand.OFF_HAND) return ActionResult.PASS;
+        if (tryAddSelfToContract(world, user, contract, stack)) return ActionResult.SUCCESS;
+
+        ItemStack stackInOtherHand = user.getStackInHand(Hand.OFF_HAND);
+        if (trySealContract(world, stackInOtherHand, contract)) return ActionResult.SUCCESS;
+
+        return ActionResult.PASS;
+    }
+
+    private boolean trySealContract(World world, ItemStack stackInOtherHand, Contract contract) {
+        if (stackInOtherHand.isOf(ModItems.WAX_SEAL) && contract.isValid()){
+            stackInOtherHand.decrement(1);
+            contract.sign();
+            playSoundToAllSigners(world, contract,SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean tryAddSelfToContract(World world, PlayerEntity user, Contract contract, ItemStack stack) {
+        if (canAddPlayerToContract(contract, user.getUuid())){
+            addPlayerToContract(stack, contract, user, world);
+            return true;
+        }
+        return false;
+    }
+
+    public void useContract(World world, PlayerEntity user, Hand hand, Contract contract, int selectedTerm) {
+        if (contract.isValidAndSigned()) {
+            contract.onUseItem(selectedTerm, world, user, hand);
+        }
+    }
+
+    public int tryCycleToNextActionableTerm(PlayerEntity user, ItemStack stack) {
         int selectedTerm = stack.getOrDefault(ModItemComponents.SELECTED_TERM,0);
         if (user.isSneaking()) {
             List<Identifier> termIds = stack.getOrDefault(ModItemComponents.TERMS,List.of());
@@ -58,31 +96,10 @@ public class ContractItem extends Item {
                 stack.set(ModItemComponents.SELECTED_TERM,selectedTerm);
             }
         }
-
-        // call contract functions
-        Contract contract = getContract(stack, (ServerWorld) world);
-        if (contract.isValidAndSigned()) {
-            contract.onUseItem(selectedTerm, world, user, hand);
-        }
-
-        // add self to contract when used
-        if (hand == Hand.OFF_HAND) return ActionResult.PASS;
-        ItemStack stackInOtherHand = user.getStackInHand(Hand.OFF_HAND);
-        if (canAddPlayerToContract(contract,user.getUuid())){
-            addPlayerToContract(stack,contract,user,world);
-            return ActionResult.SUCCESS;
-        }
-        // seal contract
-        if (stackInOtherHand.isOf(ModItems.WAX_SEAL) && contract.isValid()){
-            stackInOtherHand.decrement(1);
-            contract.sign();
-            playSoundToAllSigners(world,contract,SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP);
-            return ActionResult.SUCCESS;
-        }
-        return ActionResult.PASS;
+        return selectedTerm;
     }
 
-    private void playSoundToAllSigners(World world, Contract contract, SoundEvent sound) {
+    public void playSoundToAllSigners(World world, Contract contract, SoundEvent sound) {
         for (UUID signer : contract.getSigners()) {
             PlayerEntity player = world.getPlayerAnyDimension(signer);
             if (player == null) {continue;}
@@ -90,7 +107,7 @@ public class ContractItem extends Item {
         }
     }
 
-    protected void addPlayerToContract(ItemStack stack, Contract contract, PlayerEntity player, World world) {
+    public void addPlayerToContract(ItemStack stack, Contract contract, PlayerEntity player, World world) {
         contract.addSigner(player.getUuid());
         ArrayList<String> signatures = new ArrayList<>(stack.getOrDefault(ModItemComponents.SIGNATURES,List.of()));
         signatures.add(player.getStringifiedName());
@@ -98,7 +115,7 @@ public class ContractItem extends Item {
         playSoundToAllSigners(world,contract,SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE);
     }
 
-    private boolean canAddPlayerToContract(Contract contract, UUID player){
+    public boolean canAddPlayerToContract(Contract contract, UUID player){
         return !contract.getSigners().contains(player)&&contract.isUnfinished();
     }
 
@@ -191,7 +208,7 @@ public class ContractItem extends Item {
         updateItemComponents(stack, world);
     }
 
-    private static void updateItemComponents(ItemStack stack, ServerWorld world) {
+    public void updateItemComponents(ItemStack stack, ServerWorld world) {
         if (!stack.hasChangedComponent(ModItemComponents.CONTRACT_ID)) return;
         // check contract state
         Contract contract = getContractNoDirty(stack, world);
