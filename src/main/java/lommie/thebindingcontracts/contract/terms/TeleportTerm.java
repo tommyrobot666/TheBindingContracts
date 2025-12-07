@@ -55,6 +55,7 @@ public class TeleportTerm extends TermsAndConditions implements TwoPlayerTermsAn
         return ModTerms.TELEPORT;
     }
 
+    @SuppressWarnings("unused")
     @Override
     public boolean typeHasAction() {
         return true;

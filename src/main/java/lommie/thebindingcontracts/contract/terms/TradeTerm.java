@@ -53,6 +53,7 @@ public class TradeTerm extends TermsAndConditions implements TwoPlayerTermsAndCo
         return ModTerms.TRADE;
     }
 
+    @SuppressWarnings("unused")
     @Override
     public boolean typeHasAction() {
         return true;

@@ -85,6 +85,7 @@ public abstract class TermsAndConditions implements TermsAndConditionsType{
         return this.getClass().getConstructor().newInstance();
     }
 
+    @SuppressWarnings("unused")
     public static List<Text> listToDisplayText(List<TermsAndConditionsType> terms){
         ArrayList<Text> texts = new ArrayList<>(terms.size());
         for (TermsAndConditionsType term : terms) {
