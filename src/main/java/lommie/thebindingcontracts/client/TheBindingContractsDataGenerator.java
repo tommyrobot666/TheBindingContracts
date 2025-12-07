@@ -14,6 +14,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.client.data.*;
 import net.minecraft.client.render.item.model.ItemModel;
 import net.minecraft.data.recipe.RecipeExporter;
+import net.minecraft.data.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
@@ -49,6 +50,7 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
             registerContractModel(ModItems.CONTRACT,m);
             registerContractModel(ModItems.TWO_PLAYER_CONTRACT,m);
             m.register(ModItems.WAX_SEAL, Models.GENERATED);
+            m.register(ModItems.LEGAL_STUFF, Models.GENERATED);
         }
 
         public final void registerContractModel(Item item, ItemModelGenerator m){
@@ -79,6 +81,7 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
             b.add(ModItems.WAX_SEAL, "Wax seal");
             b.add("itemGroup."+ TheBindingContracts.MOD_ID+".other_items","The Binding UnContracts");
             b.add("itemGroup."+ TheBindingContracts.MOD_ID+".contracts","The Binding Contracts");
+            b.add(ModItems.LEGAL_STUFF, "Legal Stuff");
         }
     }
 
@@ -100,10 +103,21 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
                             itemLookup,
                             RecipeCategory.MISC,
                             ModItems.CONTRACT)
-                            .criterion(hasItem(Items.NETHER_STAR),conditionsFromItem(Items.NETHER_STAR))
+                            .criterion(hasItem(ModItems.CONTRACT),conditionsFromItem(ModItems.CONTRACT))
                             .pattern("*!*")
                             .input('*', Items.NETHER_STAR)
                             .input('!', ModItems.CONTRACT)
+                            .offerTo(exporter);
+
+                    ShapedRecipeJsonBuilder.create(
+                            itemLookup,
+                            RecipeCategory.MISC,
+                            ModItems.CONTRACT)
+                            .pattern("## ")
+                            .pattern(" # ")
+                            .pattern(" ##")
+                            .input('#',ModItems.LEGAL_STUFF)
+                            .criterion(hasItem(ModItems.LEGAL_STUFF),conditionsFromItem(ModItems.LEGAL_STUFF))
                             .offerTo(exporter);
                 }
             };

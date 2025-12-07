@@ -26,6 +26,9 @@ public class ModItems {
     public static final Item TWO_PLAYER_CONTRACT = register("two_player_contract",
             TwoPlayerContractItem::new, new Item.Settings());
 
+    public static final Item LEGAL_STUFF = register("legal_stuff",
+            Item::new, new Item.Settings());
+
     @SuppressWarnings("EmptyMethod")
     public static void register(){}
 }

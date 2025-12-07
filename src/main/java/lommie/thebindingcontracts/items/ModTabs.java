@@ -20,7 +20,11 @@ public class ModTabs {
             FabricItemGroup.builder()
                     .displayName(Text.translatable("itemGroup."+TheBindingContracts.MOD_ID+".other_items"))
                     .icon(ModItems.WAX_SEAL::getDefaultStack)
-                    .entries(((context, entries) -> entries.add(ModItems.WAX_SEAL.getDefaultStack())))
+                    .entries(((context, entries) -> {
+                        entries.add(ModItems.WAX_SEAL.getDefaultStack());
+                        entries.add(ModItems.LEGAL_STUFF);
+                    }
+                    ))
     );
 
     @SuppressWarnings("unused")

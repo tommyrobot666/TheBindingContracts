@@ -53,7 +53,7 @@ public class ContractItem extends Item {
                 List<TermsAndConditionsType> termTypes = TermsAndConditions.getTypesFromIds(termIds);
                 List<Integer> termsWithActions = TermsAndConditions.getTermsWithActionsAndIndex(termTypes).keySet().stream().toList();
                 int i = termsWithActions.indexOf(selectedTerm);
-                i = i > termsWithActions.size() ? 0 : ++i;
+                i = i >= termsWithActions.size() ? 0 : ++i;
                 selectedTerm = termsWithActions.get(i);
                 stack.set(ModItemComponents.SELECTED_TERM,selectedTerm);
             }
