@@ -15,10 +15,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public abstract class TermsAndConditions implements TermsAndConditionsType{
     public static final Codec<TermsAndConditions> CODEC = RecordCodecBuilder.create((instance) ->
@@ -88,11 +85,30 @@ public abstract class TermsAndConditions implements TermsAndConditionsType{
         return this.getClass().getConstructor().newInstance();
     }
 
-    public static List<Text> listToDisplayText(List<TermsAndConditions> terms){
+    public static List<Text> listToDisplayText(List<TermsAndConditionsType> terms){
         ArrayList<Text> texts = new ArrayList<>(terms.size());
-        for (TermsAndConditions term : terms) {
+        for (TermsAndConditionsType term : terms) {
             texts.add(term.typeGetDisplayName());
         }
         return texts;
+    }
+
+    public static List<TermsAndConditionsType> getTypesFromIds(List<Identifier> termIds){
+        ArrayList<TermsAndConditionsType> texts = new ArrayList<>(termIds.size());
+        for (Identifier termId : termIds) {
+            texts.add(TheBindingContracts.TERM_TYPE_REGISTRY.get(termId));
+        }
+        return texts;
+    }
+
+    public static Map<Integer,Identifier> getTermsWithActionsAndIndex(List<TermsAndConditionsType> terms) {
+        HashMap<Integer,Identifier> termsWithActions = new HashMap<>(terms.size());
+        for (int i = 0; i < terms.size(); i++) {
+            TermsAndConditionsType term = terms.get(i);
+            if (term.typeHasAction()){
+                termsWithActions.put(i,term.typeGetId());
+            }
+        }
+        return termsWithActions;
     }
 }

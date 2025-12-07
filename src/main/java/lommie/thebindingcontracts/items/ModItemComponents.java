@@ -44,6 +44,17 @@ public class ModItemComponents {
                     (buf -> buf.readCollection(ArrayList::new,(b) -> TermsAndConditions.PACKET_CODEC.decode((RegistryByteBuf) b)))
             )).build());
 
+    public static final ComponentType<List<Identifier>> TERMS = register("terms",
+            new ComponentType.Builder<List<Identifier>>().codec(Identifier.CODEC.listOf())
+                    .packetCodec(PacketCodec.of((sl, buf) -> buf.writeCollection(sl, PacketByteBuf::writeIdentifier),
+                            (buf) -> buf.readCollection(ArrayList::new, PacketByteBuf::readIdentifier))).build());
+
+    public static final ComponentType<Integer> SELECTED_TERM = register("selected_term",
+            new ComponentType.Builder<Integer>().codec(Codec.INT).packetCodec(PacketCodec.of(
+                    (i,b) -> b.writeInt(i),
+                    PacketByteBuf::readInt
+            )).build());
+
     @SuppressWarnings("EmptyMethod")
     public static void register(){}
 }

@@ -160,12 +160,16 @@ public class Contract {
         signed = val;
     }
 
-    public Map<Integer,Identifier> getTermsWithActionsAndIndex() {
-        HashMap<Integer,Identifier> termsWithActions = new HashMap<>(terms.size());
+    public int getTermsSize() {
+        return terms.size();
+    }
+
+    public List<Identifier> getTermIds() {
+        ArrayList<Identifier> termsWithActions = new ArrayList<>(terms.size());
         for (int i = 0; i < terms.size(); i++) {
             TermsAndConditions term = terms.get(i);
             if (term.typeHasAction()){
-                termsWithActions.put(i,term.typeGetId());
+                termsWithActions.add(i,term.typeGetId());
             }
         }
         return termsWithActions;
