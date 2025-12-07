@@ -28,9 +28,9 @@ public class TeleportTerm extends TermsAndConditions implements TwoPlayerTermsAn
     @Override
     public void onUseWhenOtherIsOnline(ServerWorld world, ServerPlayerEntity user, ServerPlayerEntity other, Hand hand, ItemStack stack, ItemStack stackInOtherHand, Contract contract) {
         int usesLeft = savedData.getInt("uses_left",0);
-        if (usesLeft < 1) return;
+        if (usesLeft < 0) return;
 
-        user.sendMessage(Text.literal("Uses left: "+usesLeft));
+        user.sendMessage(Text.translatable(ModTerms.TELEPORT.toTranslationKey("term","uses_left"),usesLeft));
         user.teleportTo(new TeleportTarget(world, other.getEntityPos(), Vec3d.ZERO,
                 other.getYaw(), other.getPitch(), TeleportTarget.NO_OP));
 
