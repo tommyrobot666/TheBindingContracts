@@ -35,4 +35,9 @@ public class TwoPlayerContractItem extends ContractItem{
         Contract contract = getContract(stack, (ServerWorld) player.getEntityWorld());
         addPlayerToContract(stack, contract, player, player.getEntityWorld());
     }
+
+    @Override
+    public boolean canAddPlayerToContract(Contract contract, UUID player) {
+        return super.canAddPlayerToContract(contract, player) && contract.getSigners().size() < 2;
+    }
 }

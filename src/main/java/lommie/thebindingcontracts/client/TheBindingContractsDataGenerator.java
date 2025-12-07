@@ -119,6 +119,17 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
                             .input('#',ModItems.LEGAL_STUFF)
                             .criterion(hasItem(ModItems.LEGAL_STUFF),conditionsFromItem(ModItems.LEGAL_STUFF))
                             .offerTo(exporter);
+
+                    ShapedRecipeJsonBuilder.create(
+                                    itemLookup,
+                                    RecipeCategory.MISC,
+                                    ModItems.TWO_PLAYER_CONTRACT)
+                            .pattern(" ##")
+                            .pattern(" # ")
+                            .pattern("## ")
+                            .input('#',ModItems.LEGAL_STUFF)
+                            .criterion(hasItem(ModItems.LEGAL_STUFF),conditionsFromItem(ModItems.LEGAL_STUFF))
+                            .offerTo(exporter);
                 }
             };
         }
