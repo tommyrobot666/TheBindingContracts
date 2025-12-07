@@ -165,13 +165,11 @@ public class Contract {
     }
 
     public List<Identifier> getTermIds() {
-        ArrayList<Identifier> termsWithActions = new ArrayList<>(terms.size());
+        ArrayList<Identifier> termIds = new ArrayList<>(terms.size());
         for (int i = 0; i < terms.size(); i++) {
             TermsAndConditions term = terms.get(i);
-            if (term.typeHasAction()){
-                termsWithActions.add(i,term.typeGetId());
-            }
+            termIds.add(i,term.typeGetId());
         }
-        return termsWithActions;
+        return termIds;
     }
 }

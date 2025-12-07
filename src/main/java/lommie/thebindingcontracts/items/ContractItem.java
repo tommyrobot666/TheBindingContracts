@@ -113,6 +113,7 @@ public class ContractItem extends Item {
             return;
         }
 
+        textConsumer.accept(Text.literal("Terms:").formatted(Formatting.GRAY));
         int selectedTerm = stack.getOrDefault(ModItemComponents.SELECTED_TERM,0);
         List<Identifier> termIds = stack.getOrDefault(ModItemComponents.TERMS,List.of());
         List<TermsAndConditionsType> termTypes = TermsAndConditions.getTypesFromIds(termIds);
@@ -125,11 +126,12 @@ public class ContractItem extends Item {
             textConsumer.accept(prefix);
         }
 
+        textConsumer.accept(Text.empty());
         List<String> signatures = stack.getOrDefault(ModItemComponents.SIGNATURES,List.of());
         if (signatures.isEmpty()) {
-            textConsumer.accept(Text.literal("No signatures"));
+            textConsumer.accept(Text.literal("No signatures").formatted(Formatting.RED));
         } else {
-            textConsumer.accept(Text.literal("Signed by:"));
+            textConsumer.accept(Text.literal("Signed by:").formatted(Formatting.GRAY));
             StringBuilder stringBuilder = new StringBuilder();
             int lineLength = 0;
             for (String name : signatures) {
