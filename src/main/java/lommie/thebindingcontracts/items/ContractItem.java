@@ -130,17 +130,22 @@ public class ContractItem extends Item {
             return;
         }
 
-        textConsumer.accept(Text.translatable(ModItems.CONTRACT.getTranslationKey()+".terms").formatted(Formatting.GRAY));
-        int selectedTerm = stack.getOrDefault(ModItemComponents.SELECTED_TERM,0);
         List<Identifier> termIds = stack.getOrDefault(ModItemComponents.TERMS,List.of());
-        List<TermsAndConditionsType> termTypes = TermsAndConditions.getTypesFromIds(termIds);
-        for (int i = 0; i < termTypes.size(); i++) {
-            TermsAndConditionsType termType = termTypes.get(i);
-            MutableText prefix = !termType.typeHasAction() ? Text.empty() :
-                    selectedTerm == i ? Text.literal("@> ").formatted(Formatting.BOLD,Formatting.GOLD)
-                            : Text.literal("@ ");
-            prefix.append(termType.typeGetDisplayName());
-            textConsumer.accept(prefix);
+        if (termIds.isEmpty()) {
+            textConsumer.accept(Text.translatable(ModItems.CONTRACT.getTranslationKey()+".no_terms").formatted(Formatting.RED));
+        } else {
+            textConsumer.accept(Text.translatable(ModItems.CONTRACT.getTranslationKey()+".terms").formatted(Formatting.GRAY));
+
+            int selectedTerm = stack.getOrDefault(ModItemComponents.SELECTED_TERM, 0);
+            List<TermsAndConditionsType> termTypes = TermsAndConditions.getTypesFromIds(termIds);
+            for (int i = 0; i < termTypes.size(); i++) {
+                TermsAndConditionsType termType = termTypes.get(i);
+                MutableText prefix = !termType.typeHasAction() ? Text.empty() :
+                        selectedTerm == i ? Text.literal("@> ").formatted(Formatting.BOLD, Formatting.GOLD)
+                                : Text.literal("@ ");
+                prefix.append(termType.typeGetDisplayName());
+                textConsumer.accept(prefix);
+            }
         }
 
         textConsumer.accept(Text.empty());

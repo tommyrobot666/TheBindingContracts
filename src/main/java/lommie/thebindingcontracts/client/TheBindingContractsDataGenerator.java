@@ -22,6 +22,8 @@ import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -115,7 +117,7 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
                             .criterion(hasItem(ModItems.CONTRACT),conditionsFromItem(ModItems.CONTRACT))
                             .pattern("*!*")
                             .input('*', Items.NETHER_STAR)
-                            .input('!', ModItems.CONTRACT)
+                            .input('!', TagKey.of(RegistryKeys.ITEM,Identifier.of(TheBindingContracts.MOD_ID,"any_contract")))
                             .offerTo(exporter);
 
                     ShapedRecipeJsonBuilder.create(
