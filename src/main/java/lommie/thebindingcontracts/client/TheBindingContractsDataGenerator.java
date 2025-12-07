@@ -82,17 +82,19 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
             b.add(ModItems.CONTRACT, "Contract");
             b.add(ModItems.TWO_PLAYER_CONTRACT, "Contract (between only 2 players)");
             b.add(ModItems.WAX_SEAL, "Wax seal");
-            b.add("itemGroup."+ TheBindingContracts.MOD_ID+".other_items","The Binding UnContracts");
+            b.add("itemGroup."+ TheBindingContracts.MOD_ID+".other_items","The Binding Uncontracts");
             b.add("itemGroup."+ TheBindingContracts.MOD_ID+".contracts","The Binding Contracts");
             b.add(ModItems.LEGAL_STUFF, "Legal Stuff");
-            b.add(ModTerms.LIFE_LINK.toTranslationKey("term"),"Life Boost");
+            b.add(ModTerms.LIFE_LINK.toTranslationKey("term"),"Life boost");
             b.add(ModTerms.TELEPORT.toTranslationKey("term"),"Teleport");
-            b.add(ModTerms.TRADE.toTranslationKey("term"),"Send Item");
-            b.add(ModTerms.TELEPORT.toTranslationKey("term","uses_left"),"Uses Left:");
+            b.add(ModTerms.TRADE.toTranslationKey("term"),"Send item");
+            b.add(ModTerms.TELEPORT.toTranslationKey("term","uses_left"),"Uses left:");
             b.add(ModItems.CONTRACT.getTranslationKey()+".broken","BROKEN");
             b.add(ModItems.CONTRACT.getTranslationKey()+".terms","Terms:");
-            b.add(ModItems.CONTRACT.getTranslationKey()+".no_signatures","No Signatures");
-            b.add(ModItems.CONTRACT.getTranslationKey()+".signed_by","Signed By");
+            b.add(ModItems.CONTRACT.getTranslationKey()+".no_signatures","No signatures");
+            b.add(ModItems.CONTRACT.getTranslationKey()+".signed_by","Signed by");
+            b.add(ModItems.CONTRACT.getTranslationKey()+".no_terms","No terms");
+
         }
     }
 
