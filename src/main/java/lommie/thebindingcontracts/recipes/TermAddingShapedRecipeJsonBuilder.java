@@ -20,6 +20,7 @@ import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import org.jetbrains.annotations.Nullable;
 
@@ -122,5 +123,10 @@ public class TermAddingShapedRecipeJsonBuilder implements CraftingRecipeJsonBuil
         } else {
             return RawShapedRecipe.create(this.inputs, this.pattern);
         }
+    }
+
+    @Override
+    public void offerTo(RecipeExporter exporter) {
+        this.offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, this.term.typeGetId()));
     }
 }
