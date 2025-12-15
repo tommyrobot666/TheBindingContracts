@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class TermAddingShapedRecipeJsonBuilder implements CraftingRecipeJsonBuilder {
-    private final TermsAndConditions term;
+    private final List<TermsAndConditions> terms;
     private final RegistryEntryLookup<Item> registryLookup;
     private final RecipeCategory category;
     private final Item output;
@@ -42,8 +42,8 @@ public class TermAddingShapedRecipeJsonBuilder implements CraftingRecipeJsonBuil
     private String group;
     private boolean showNotification = true;
 
-    private TermAddingShapedRecipeJsonBuilder(TermsAndConditions term, RegistryEntryLookup<Item> registryLookup, RecipeCategory category, ItemConvertible output, int count) {
-        this.term = term;
+    private TermAddingShapedRecipeJsonBuilder(List<TermsAndConditions> terms, RegistryEntryLookup<Item> registryLookup, RecipeCategory category, ItemConvertible output, int count) {
+        this.terms = terms;
         this.registryLookup = registryLookup;
         this.category = category;
         this.output = output.asItem();
@@ -51,11 +51,15 @@ public class TermAddingShapedRecipeJsonBuilder implements CraftingRecipeJsonBuil
     }
 
     public static TermAddingShapedRecipeJsonBuilder create(TermsAndConditions term, RegistryEntryLookup<Item> registryLookup, RecipeCategory category, ItemConvertible output) {
-        return create(term, registryLookup, category, output, 1);
+        return create(List.of(term), registryLookup, category, output);
     }
 
-    public static TermAddingShapedRecipeJsonBuilder create(TermsAndConditions term, RegistryEntryLookup<Item> registryLookup, RecipeCategory category, ItemConvertible output, int count) {
-        return new TermAddingShapedRecipeJsonBuilder(term, registryLookup, category, output, count);
+    public static TermAddingShapedRecipeJsonBuilder create(List<TermsAndConditions> terms, RegistryEntryLookup<Item> registryLookup, RecipeCategory category, ItemConvertible output) {
+        return create(terms, registryLookup, category, output, 1);
+    }
+
+    public static TermAddingShapedRecipeJsonBuilder create(List<TermsAndConditions> terms, RegistryEntryLookup<Item> registryLookup, RecipeCategory category, ItemConvertible output, int count) {
+        return new TermAddingShapedRecipeJsonBuilder(terms, registryLookup, category, output, count);
     }
 
     @SuppressWarnings("unused")
@@ -113,7 +117,7 @@ public class TermAddingShapedRecipeJsonBuilder implements CraftingRecipeJsonBuil
         Objects.requireNonNull(builder);
         this.criteria.forEach(builder::criterion);
         ShapedRecipe shapedRecipe = new ShapedRecipe(Objects.requireNonNullElse(this.group, ""), CraftingRecipeJsonBuilder.toCraftingCategory(this.category), rawShapedRecipe, new ItemStack(this.output, this.count), this.showNotification);
-        TermAddingShapedRecipe recipe = TermAddingShapedRecipe.fromShaped(shapedRecipe, this.term);
+        TermAddingShapedRecipe recipe = TermAddingShapedRecipe.fromShaped(shapedRecipe, this.terms);
         exporter.accept(recipeKey, recipe, builder.build(recipeKey.getValue().withPrefixedPath("recipes/" + this.category.getName() + "/")));
     }
 
@@ -127,6 +131,6 @@ public class TermAddingShapedRecipeJsonBuilder implements CraftingRecipeJsonBuil
 
     @Override
     public void offerTo(RecipeExporter exporter) {
-        this.offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, this.term.typeGetId()));
+        this.offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, this.terms.getFirst().typeGetId()));
     }
 }

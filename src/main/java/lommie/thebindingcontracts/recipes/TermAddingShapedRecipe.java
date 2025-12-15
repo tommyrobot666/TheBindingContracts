@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TermAddingShapedRecipe extends ShapedRecipe {
-    private final TermsAndConditions term;
+    private final List<TermsAndConditions> terms;
     private CraftingRecipeInput lastCraftingRecipeInput; //just for display
 
-    public TermAddingShapedRecipe(TermsAndConditions term, String group, CraftingRecipeCategory category, RawShapedRecipe raw, ItemStack result, boolean showNotification) {
+    public TermAddingShapedRecipe(List<TermsAndConditions> terms, String group, CraftingRecipeCategory category, RawShapedRecipe raw, ItemStack result, boolean showNotification) {
         super(group, category, raw, result, showNotification);
-        this.term = term;
+        this.terms = terms;
     }
 
     @Override
@@ -39,11 +39,10 @@ public class TermAddingShapedRecipe extends ShapedRecipe {
     @Override
     public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup wrapperLookup) {
         ItemStack stack = super.craft(craftingRecipeInput, wrapperLookup);
-        //TODO: figure out why it just creates a new contract instead of finding the old one
         stack = getContractItemInGrid(craftingRecipeInput, stack);
 
         ArrayList<TermsAndConditions> termsToAddOnNextTick = new ArrayList<>(stack.getOrDefault(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK, List.of()));
-        termsToAddOnNextTick.add(TermsAndConditions.createNew(term.typeGetId(),term.savedData));
+        terms.forEach((term) -> termsToAddOnNextTick.add(TermsAndConditions.createNew(term.typeGetId(),term.savedData)));
         stack.set(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK, termsToAddOnNextTick);
         return stack;
     }
@@ -78,20 +77,20 @@ public class TermAddingShapedRecipe extends ShapedRecipe {
     public static class Serializer implements RecipeSerializer<TermAddingShapedRecipe> {
         public static final MapCodec<TermAddingShapedRecipe> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(ShapedRecipe.Serializer.CODEC.codec().fieldOf("").forGetter(TermAddingShapedRecipe::toShapedRecipe),
-                            TermsAndConditions.CODEC.fieldOf("term").forGetter(TermAddingShapedRecipe::getTerm))
+                            TermsAndConditions.CODEC.listOf().fieldOf("terms").forGetter(TermAddingShapedRecipe::getTerms))
                     .apply(instance, TermAddingShapedRecipe::fromShaped));
         public static final PacketCodec<RegistryByteBuf, TermAddingShapedRecipe> PACKET_CODEC = PacketCodec.ofStatic(Serializer::encode, Serializer::decode);
 
         private static TermAddingShapedRecipe decode(RegistryByteBuf buf) {
             return TermAddingShapedRecipe.fromShaped(
                     ShapedRecipe.Serializer.PACKET_CODEC.decode(buf),
-                    TermsAndConditions.PACKET_CODEC.decode(buf)
+                    buf.readList((b) -> TermsAndConditions.PACKET_CODEC.decode((RegistryByteBuf) b))
             );
         }
 
         private static void encode(RegistryByteBuf buf, TermAddingShapedRecipe r) {
             ShapedRecipe.Serializer.PACKET_CODEC.encode(buf, r.toShapedRecipe());
-            TermsAndConditions.PACKET_CODEC.encode(buf, r.term);
+            buf.writeCollection(r.terms, (b,term) -> TermsAndConditions.PACKET_CODEC.encode(buf, term));
         }
 
         @Override
@@ -105,12 +104,12 @@ public class TermAddingShapedRecipe extends ShapedRecipe {
         }
     }
 
-    public static TermAddingShapedRecipe fromShaped(ShapedRecipe shapedRecipe, TermsAndConditions term) {
+    public static TermAddingShapedRecipe fromShaped(ShapedRecipe shapedRecipe, List<TermsAndConditions> term) {
         return new TermAddingShapedRecipe(term, shapedRecipe.getGroup(), shapedRecipe.getCategory(), ((ShapedRecipeAccessor) shapedRecipe).getRaw(),((ShapedRecipeAccessor) shapedRecipe).getResult(), shapedRecipe.showNotification());
     }
 
-    private static TermsAndConditions getTerm(TermAddingShapedRecipe r) {
-        return r.term;
+    private static List<TermsAndConditions> getTerms(TermAddingShapedRecipe r) {
+        return r.terms;
     }
 
     private ShapedRecipe toShapedRecipe() {
