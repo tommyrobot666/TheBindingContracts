@@ -3,6 +3,7 @@ package lommie.thebindingcontracts;
 import lommie.thebindingcontracts.commands.ModCommands;
 import lommie.thebindingcontracts.contract.ModTerms;
 import lommie.thebindingcontracts.contract.TermsAndConditions;
+import lommie.thebindingcontracts.contract.TermsAndConditionsType;
 import lommie.thebindingcontracts.events.ModEvents;
 import lommie.thebindingcontracts.items.ModItemComponents;
 import lommie.thebindingcontracts.items.ModItems;
@@ -24,11 +25,11 @@ public class TheBindingContracts implements ModInitializer {
     @SuppressWarnings("unused")
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    public static final RegistryKey<Registry<TermsAndConditions>> TERM_TYPE_REGISTRY_KEY = RegistryKey.ofRegistry(
+    public static final RegistryKey<Registry<TermsAndConditionsType>> TERM_TYPE_REGISTRY_KEY = RegistryKey.ofRegistry(
             Identifier.of(MOD_ID,"term_type")
     );
     /**Registry for contract terms. To create a new term type, extend the {@link TermsAndConditions} class and register a new instance {@code new ClassNameTerm()}.*/
-    public static final SimpleRegistry<TermsAndConditions> TERM_TYPE_REGISTRY = FabricRegistryBuilder.createSimple(
+    public static final SimpleRegistry<TermsAndConditionsType> TERM_TYPE_REGISTRY = FabricRegistryBuilder.createSimple(
             TERM_TYPE_REGISTRY_KEY
     ).buildAndRegister();
 
