@@ -14,6 +14,7 @@ public class ModTabs {
                 Identifier.of(TheBindingContracts.MOD_ID,name), builder.build());
     }
 
+    /***/
     @SuppressWarnings("unused")
     public static final ItemGroup OTHER_ITEMS = register(
             "other_items",
@@ -27,6 +28,7 @@ public class ModTabs {
                     ))
     );
 
+    /***/
     @SuppressWarnings("unused")
     public static final ItemGroup CONTRACTS = register(
             "contracts",

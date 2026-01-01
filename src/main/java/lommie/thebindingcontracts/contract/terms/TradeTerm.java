@@ -12,6 +12,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 
+/***/
 public class TradeTerm extends TermsAndConditions implements TwoPlayerTermsAndConditions<TradeTerm> {
     public TradeTerm(NbtCompound savedData) {
         super(savedData);

@@ -9,6 +9,7 @@ import net.minecraft.server.world.ServerWorld;
 import java.util.Objects;
 import java.util.UUID;
 
+/***/
 public class TwoPlayerContractItem extends ContractItem{
     public TwoPlayerContractItem(Settings settings) {
         super(settings);

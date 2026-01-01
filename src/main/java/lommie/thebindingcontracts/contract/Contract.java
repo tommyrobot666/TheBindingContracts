@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 
 import java.util.*;
 
+/***/
 public class Contract {
     public static final Codec<Contract> CODEC = RecordCodecBuilder.create((instance) ->
         instance.group(TermsAndConditions.CODEC.listOf().fieldOf("terms")

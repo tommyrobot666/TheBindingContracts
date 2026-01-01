@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
+/***/
 public class ContractItem extends Item {
     public static final int SIGNATURES_TOOLTIP_MAX_CHAR_PER_LINE = 150;
 

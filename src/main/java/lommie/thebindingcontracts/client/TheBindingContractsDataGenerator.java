@@ -56,6 +56,7 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
             m.register(ModItems.LEGAL_STUFF, Models.GENERATED);
         }
 
+        /***/
         public final void registerContractModel(Item item, ItemModelGenerator m){
             ItemModel.Unbaked unsigned = ItemModels.basic(m.registerSubModel(item,"", ModModels.CONTRACT));
             ItemModel.Unbaked one_signature = ItemModels.basic(m.registerSubModel(item,"_valid", ModModels.CONTRACT));

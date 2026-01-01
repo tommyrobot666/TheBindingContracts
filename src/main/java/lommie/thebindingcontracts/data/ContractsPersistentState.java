@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**Stores the world's contracts. Very important.*/
 public class ContractsPersistentState extends PersistentState {
     public static final Codec<ContractsPersistentState> CODEC = Codec.unboundedMap(
             Uuids.CODEC,Contract.CODEC

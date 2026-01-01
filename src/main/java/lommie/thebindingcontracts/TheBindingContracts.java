@@ -27,6 +27,7 @@ public class TheBindingContracts implements ModInitializer {
     public static final RegistryKey<Registry<TermsAndConditions>> TERM_TYPE_REGISTRY_KEY = RegistryKey.ofRegistry(
             Identifier.of(MOD_ID,"term_type")
     );
+    /**Registry for contract terms. To create a new term type, extend the {@link TermsAndConditions} class and register a new instance {@code new ClassNameTerm()}.*/
     public static final SimpleRegistry<TermsAndConditions> TERM_TYPE_REGISTRY = FabricRegistryBuilder.createSimple(
             TERM_TYPE_REGISTRY_KEY
     ).buildAndRegister();

@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**Creates a recipe for modifying {@link lommie.thebindingcontracts.contract.Contract}s by adding a new term. The crafting pattern must contain an item of type {@link lommie.thebindingcontracts.items.ContractItem} or a class that extends it.*/
 public class TermAddingShapedRecipeJsonBuilder implements CraftingRecipeJsonBuilder {
     private final List<TermsAndConditions> terms;
     private final RegistryEntryLookup<Item> registryLookup;

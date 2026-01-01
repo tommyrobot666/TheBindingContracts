@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
+/***/
 public class LifeLinkTerm extends TermsAndConditions {
     public static final Identifier MAX_HEALTH_MODIFIER = Identifier.of(
             TheBindingContracts.MOD_ID,"contract"

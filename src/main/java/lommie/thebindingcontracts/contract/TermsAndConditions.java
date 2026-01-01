@@ -17,6 +17,7 @@ import net.minecraft.util.Identifier;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+/***/
 public abstract class TermsAndConditions implements TermsAndConditionsType{
     public static final Codec<TermsAndConditions> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(Identifier.CODEC.fieldOf("id")

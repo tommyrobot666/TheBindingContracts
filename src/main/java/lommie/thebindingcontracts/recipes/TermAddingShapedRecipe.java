@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
+/***/
 public class TermAddingShapedRecipe extends ShapedRecipe {
     private final List<TermsAndConditions> terms;
     private CraftingRecipeInput lastCraftingRecipeInput; //just for display
