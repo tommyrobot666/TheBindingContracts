@@ -12,7 +12,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 
-/***/
+/**An example of a term for two player contracts that allows the signers to send items to the other*/
 public class TradeTerm extends TermsAndConditions implements TwoPlayerTermsAndConditions<TradeTerm> {
     public TradeTerm(NbtCompound savedData) {
         super(savedData);

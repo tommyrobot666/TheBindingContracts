@@ -5,7 +5,7 @@ import lommie.thebindingcontracts.contract.TermsAndConditions;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
-/***/
+/**An example of an empty Term class*/
 public class LandTerm extends TermsAndConditions {
     public LandTerm(NbtCompound savedData) {
         super(savedData);

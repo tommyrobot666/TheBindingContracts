@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
-/***/
+/**The item that players use to interact with the contract system*/
 public class ContractItem extends Item {
     public static final int SIGNATURES_TOOLTIP_MAX_CHAR_PER_LINE = 150;
 
@@ -78,12 +78,14 @@ public class ContractItem extends Item {
         return false;
     }
 
+    /**The contract attempts to do the selected term's "onUse" action*/
     public void useContract(World world, PlayerEntity user, Hand hand, Contract contract, int selectedTerm) {
         if (contract.isValidAndSigned()) {
             contract.onUseItem(selectedTerm, world, user, hand);
         }
     }
 
+    /**Gets the selected term with a "onUse" action. Also handles switching the selected term*/
     public int tryCycleToNextActionableTerm(PlayerEntity user, ItemStack stack) {
         int selectedTerm = stack.getOrDefault(ModItemComponents.SELECTED_TERM,0);
         if (user.isSneaking()) {
@@ -100,6 +102,7 @@ public class ContractItem extends Item {
         return selectedTerm;
     }
 
+    /**Plays a sound to all players in {@link Contract#getSigners()}*/
     public void playSoundToAllSigners(World world, Contract contract, SoundEvent sound) {
         for (UUID signer : contract.getSigners()) {
             PlayerEntity player = world.getPlayerAnyDimension(signer);
@@ -199,6 +202,12 @@ public class ContractItem extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
+        addTermsFromToAddOnNextTick(stack, world);
+        updateItemComponents(stack, world);
+    }
+
+    /**When a contract item is made with startingTerms ({@link ContractItem#ContractItem(Settings, List)}) or the term adding recipe is used ({@link lommie.thebindingcontracts.recipes.TermAddingShapedRecipe}), adds the terms to the contract.*/
+    private void addTermsFromToAddOnNextTick(ItemStack stack, ServerWorld world) {
         if (stack.hasChangedComponent(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK)) {
             List<TermsAndConditions> termsToAddOnNextTick = stack.get(ModItemComponents.TERMS_TO_ADD_ON_NEXT_TICK);
             Contract contract = getContract(stack, world);
@@ -210,10 +219,9 @@ public class ContractItem extends Item {
 
             playSoundToAllSigners(world,contract,SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT);
         }
-
-        updateItemComponents(stack, world);
     }
 
+    /**Changes the item to show the state of the contract*/
     public void updateItemComponents(ItemStack stack, ServerWorld world) {
         if (!stack.hasChangedComponent(ModItemComponents.CONTRACT_ID)) return;
         // check contract state

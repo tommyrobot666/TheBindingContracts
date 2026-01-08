@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
-/***/
+/**An example of a term that doubles the health of all who sign it. The contract is broken if any signer dies. When the contract is broken, everyone is killed.*/
 public class LifeLinkTerm extends TermsAndConditions {
     public static final Identifier MAX_HEALTH_MODIFIER = Identifier.of(
             TheBindingContracts.MOD_ID,"contract"

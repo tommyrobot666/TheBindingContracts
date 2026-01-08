@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 
 import java.util.*;
 
-/***/
+/**Stores signers and terms. Also applies the term's effects.*/
 public class Contract {
     public static final Codec<Contract> CODEC = RecordCodecBuilder.create((instance) ->
         instance.group(TermsAndConditions.CODEC.listOf().fieldOf("terms")

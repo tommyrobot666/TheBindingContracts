@@ -4,7 +4,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-/***/
+/**Forces you to implement some methods for creating new TermsAndConditions. Used for the TermsAndConditions registry.*/
 public interface TermsAndConditionsType {
     TermsAndConditions typeCreateNew(NbtCompound savedData);
 

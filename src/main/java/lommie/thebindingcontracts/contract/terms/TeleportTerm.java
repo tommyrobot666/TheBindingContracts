@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 
-/***/
+/**An example of a term for two player contracts that teleports one player to the other, but has limited uses. It doesn't break the contract when it runs out of uses.*/
 public class TeleportTerm extends TermsAndConditions implements TwoPlayerTermsAndConditions<TeleportTerm> {
     public TeleportTerm(NbtCompound savedData) {
         super(savedData);

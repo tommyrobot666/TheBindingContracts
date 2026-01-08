@@ -8,13 +8,14 @@ import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+/**You can add your items to the tabs in this class*/
 public class ModTabs {
     public static ItemGroup register(String name, ItemGroup.Builder builder) {
         return Registry.register(Registries.ITEM_GROUP,
                 Identifier.of(TheBindingContracts.MOD_ID,name), builder.build());
     }
 
-    /***/
+    /**Items for contracts*/
     @SuppressWarnings("unused")
     public static final ItemGroup OTHER_ITEMS = register(
             "other_items",
@@ -28,7 +29,7 @@ public class ModTabs {
                     ))
     );
 
-    /***/
+    /**The {@link lommie.thebindingcontracts.items.ContractItem}s*/
     @SuppressWarnings("unused")
     public static final ItemGroup CONTRACTS = register(
             "contracts",

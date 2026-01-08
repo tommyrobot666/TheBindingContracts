@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-/***/
+/**A recipe for modifying {@link lommie.thebindingcontracts.contract.Contract}s by adding a new term. The crafting pattern should contain an item of type {@link lommie.thebindingcontracts.items.ContractItem} or a class that extends it.*/
 public class TermAddingShapedRecipe extends ShapedRecipe {
     private final List<TermsAndConditions> terms;
     private CraftingRecipeInput lastCraftingRecipeInput; //just for display
@@ -71,8 +71,11 @@ public class TermAddingShapedRecipe extends ShapedRecipe {
 
     @Override
     public boolean matches(CraftingRecipeInput craftingRecipeInput, World world) {
-        this.lastCraftingRecipeInput = craftingRecipeInput;
-        return super.matches(craftingRecipeInput, world);
+        if (super.matches(craftingRecipeInput, world)) {
+            this.lastCraftingRecipeInput = craftingRecipeInput;
+            return true;
+        }
+        return false;
     }
 
     public static class Serializer implements RecipeSerializer<TermAddingShapedRecipe> {
