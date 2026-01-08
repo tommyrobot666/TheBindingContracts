@@ -50,25 +50,10 @@ public class TheBindingContractsDataGenerator implements DataGeneratorEntrypoint
 
         @Override
         public void generateItemModels(ItemModelGenerator m) {
-            registerContractModel(ModItems.CONTRACT,m);
-            registerContractModel(ModItems.TWO_PLAYER_CONTRACT,m);
+            ModModels.registerContractModel(ModItems.CONTRACT,m);
+            ModModels.registerContractModel(ModItems.TWO_PLAYER_CONTRACT,m);
             m.register(ModItems.WAX_SEAL, Models.GENERATED);
             m.register(ModItems.LEGAL_STUFF, Models.GENERATED);
-        }
-
-        /***/
-        public final void registerContractModel(Item item, ItemModelGenerator m){
-            ItemModel.Unbaked unsigned = ItemModels.basic(m.registerSubModel(item,"", ModModels.CONTRACT));
-            ItemModel.Unbaked one_signature = ItemModels.basic(m.registerSubModel(item,"_valid", ModModels.CONTRACT));
-            ItemModel.Unbaked complete = ItemModels.basic(m.registerSubModel(item,"_complete",ModModels.CONTRACT));
-            ItemModel.Unbaked broken = ItemModels.basic(m.registerSubModel(item,"_broken",ModModels.CONTRACT));
-            m.output.accept(item, ItemModels.condition(ItemModels.hasComponentProperty(ModItemComponents.BROKEN),
-                    broken,
-                    ItemModels.condition(ItemModels.hasComponentProperty(ModItemComponents.VALID),
-                            ItemModels.condition(ItemModels.hasComponentProperty(ModItemComponents.SIGNED),
-                                    complete,
-                                    one_signature),
-                            unsigned)));
         }
     }
 
